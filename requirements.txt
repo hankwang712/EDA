@@ -1,0 +1,15 @@
+fastmcp
+python-dotenv
+starlette
+mcp
+requests
+pandas
+openai
+langchain
+langchain-community
+langchain-core
+langchain-openai
+langchain-deepseek
+pydantic
+flask
+ragas

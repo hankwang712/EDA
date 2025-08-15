@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "json2excelsse": {
+      "type": "sse",
+      "url": "https://mcp2.wtsolutions.cn/sse"
+    }
+  }
+}

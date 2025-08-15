@@ -1,0 +1,4840 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 应急灾害方案生成智能体
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.6@dd589dc093c8084925858034ab5ec1fdf0d33819f43226c2f8c4a749a9acbbb2
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/ollama:0.0.6@f430f3eb959f4863b1e87171544a8fec179441b90deda5693c85f07712d2a68c
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/siliconflow:0.0.22@588c9f60178d37985626f1118347eb92bedcd8cb27d25bafc4ac929027ec51dc
+kind: app
+version: 0.3.1
+workflow:
+  conversation_variables:
+  - description: ''
+    id: bc72ce7b-e77f-4a59-a0d3-ed47f4568efe
+    name: miss_path
+    selector:
+    - conversation
+    - miss_path
+    value: 请加入周边不同方位的医院到达事发地的路径规划信息。
+    value_type: string
+  - description: ''
+    id: f85d9836-80e4-4381-b181-daecd14edfa6
+    name: path_agree
+    selector:
+    - conversation
+    - path_agree
+    value: 0
+    value_type: integer
+  - description: ''
+    id: 97d33d81-582d-4f2c-9196-818a9649298d
+    name: avoidpolygons
+    selector:
+    - conversation
+    - avoidpolygons
+    value:
+    - 无
+    value_type: array[string]
+  - description: 用于描述当前灾害的事发地地中心位置
+    id: 72226779-456d-4fe4-89b3-ef4c072fc724
+    name: incident_site
+    selector:
+    - conversation
+    - incident_site
+    value: ''
+    value_type: string
+  - description: ''
+    id: 810e4d51-b3a4-410d-8594-84145eedefe0
+    name: miss_geo
+    selector:
+    - conversation
+    - miss_geo
+    value: 请补充地理信息，例如道路分布、地形起伏、周边基础设施(如医疗资源的分布，可住宿地方的分布)等对救援的影响
+    value_type: string
+  - description: ''
+    id: 1589115e-2a27-4185-8c35-3be62deb7369
+    name: miss_weather
+    selector:
+    - conversation
+    - miss_weather
+    value: 请详细说明天气相关因素对灾害响应的影响，例如温度、降雨、风速，三日的天气，以及是否未来存在气象灾害等。
+    value_type: string
+  - description: 方案缺少信息
+    id: 3bc5d065-6506-40b5-9a33-7852d3cc5476
+    name: missed
+    selector:
+    - conversation
+    - missed
+    value:
+    - '[]'
+    value_type: array[string]
+  - description: ''
+    id: d69000cb-359d-4241-9323-72d1b5cc5fb0
+    name: geo_agree
+    selector:
+    - conversation
+    - geo_agree
+    value: 0
+    value_type: integer
+  - description: ''
+    id: d6f0430c-0133-4b48-ae63-afa3bdd28a2b
+    name: weather_agree
+    selector:
+    - conversation
+    - weather_agree
+    value: 0
+    value_type: integer
+  - description: 灾情检索范围
+    id: 2f33ea69-845d-4349-9588-c4640837121c
+    name: radius
+    selector:
+    - conversation
+    - radius
+    value: 0
+    value_type: integer
+  - description: 当前伤亡的情况
+    id: 7f7f18cc-4e55-4f4d-a890-76826f1ee16a
+    name: current_injury
+    selector:
+    - conversation
+    - current_injury
+    value: ''
+    value_type: string
+  - description: 灾害影响范围
+    id: 18fc4fed-2e5d-432c-b580-d184d3699db2
+    name: disaster_range
+    selector:
+    - conversation
+    - disaster_range
+    value: 0
+    value_type: integer
+  - description: 灾害的等级
+    id: 03aaa985-6f2b-4d75-96d1-300b5df0f065
+    name: disaster_grade
+    selector:
+    - conversation
+    - disaster_grade
+    value: ''
+    value_type: string
+  - description: 灾害的类型
+    id: d871b00c-3352-463a-bbcc-9e672f530b79
+    name: disaster_type
+    selector:
+    - conversation
+    - disaster_type
+    value: ''
+    value_type: string
+  - description: 城市的名字
+    id: c5d47469-1f45-4f43-9079-95893adad4cf
+    name: city_name
+    selector:
+    - conversation
+    - city_name
+    value: ''
+    value_type: string
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - remote_url
+      - local_file
+      enabled: true
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1752042961128-1-1752043064241-target
+      selected: false
+      source: '1752042961128'
+      sourceHandle: '1'
+      target: '1752043064241'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: question-classifier
+      id: 1752042961128-2-1752483688809-target
+      selected: false
+      source: '1752042961128'
+      sourceHandle: '2'
+      target: '1752483688809'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1752483688809-1-1752040353794-target
+      selected: false
+      source: '1752483688809'
+      sourceHandle: '1'
+      target: '1752040353794'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: question-classifier
+      id: 1751250025987-source-1752042961128-target
+      selected: false
+      source: '1751250025987'
+      sourceHandle: source
+      target: '1752042961128'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1751250025987-source-1752746496115-target
+      selected: false
+      source: '1751250025987'
+      sourceHandle: source
+      target: '1752746496115'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: agent
+        targetType: loop
+      id: 17524833289810-source-1753161668061-target
+      selected: false
+      source: '17524833289810'
+      sourceHandle: source
+      target: '1753161668061'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: loop-start
+        targetType: llm
+      id: 1753161668061start-source-1753162243577-target
+      selected: false
+      source: 1753161668061start
+      sourceHandle: source
+      target: '1753162243577'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: llm
+        targetType: assigner
+      id: 1753162243577-source-1753162633470-target
+      selected: false
+      source: '1753162243577'
+      sourceHandle: source
+      target: '1753162633470'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: assigner
+        targetType: question-classifier
+      id: 1753162633470-source-1753162369478-target
+      selected: false
+      source: '1753162633470'
+      sourceHandle: source
+      target: '1753162369478'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: assigner
+        targetType: question-classifier
+      id: 1753162633470-source-1753162737967-target
+      selected: false
+      source: '1753162633470'
+      sourceHandle: source
+      target: '1753162737967'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: loop
+      id: 1752483688809-2-1753161668061-target
+      selected: false
+      source: '1752483688809'
+      sourceHandle: '2'
+      target: '1753161668061'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 1752040353794-source-1752500809757-target
+      selected: false
+      source: '1752040353794'
+      sourceHandle: source
+      target: '1752500809757'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 1752043064241-source-answer-target
+      selected: false
+      source: '1752043064241'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: if-else
+        targetType: answer
+      id: 1753163155535-true-1753711423105-target
+      selected: false
+      source: '1753163155535'
+      sourceHandle: 'true'
+      target: '1753711423105'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: answer
+        targetType: loop-end
+      id: 1753711423105-source-1753711462182-target
+      selected: false
+      source: '1753711423105'
+      sourceHandle: source
+      target: '1753711462182'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: question-classifier
+        targetType: assigner
+      id: 1753162369478-1-1753799485783-target
+      selected: false
+      source: '1753162369478'
+      sourceHandle: '1'
+      target: '1753799485783'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: question-classifier
+        targetType: assigner
+      id: 1753162737967-1-1753799492089-target
+      selected: false
+      source: '1753162737967'
+      sourceHandle: '1'
+      target: '1753799492089'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: assigner
+        targetType: if-else
+      id: 1753799485783-source-1753163155535-target
+      selected: false
+      source: '1753799485783'
+      sourceHandle: source
+      target: '1753163155535'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: assigner
+        targetType: if-else
+      id: 1753799492089-source-1753163155535-target
+      selected: false
+      source: '1753799492089'
+      sourceHandle: source
+      target: '1753163155535'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: if-else
+        targetType: if-else
+      id: 1753163155535-false-1753799669136-target
+      selected: false
+      source: '1753163155535'
+      sourceHandle: 'false'
+      target: '1753799669136'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: if-else
+        targetType: assigner
+      id: 1753799669136-true-1753799735144-target
+      selected: false
+      source: '1753799669136'
+      sourceHandle: 'true'
+      target: '1753799735144'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: assigner
+        targetType: if-else
+      id: 1753799735144-source-1753799988067-target
+      selected: false
+      source: '1753799735144'
+      sourceHandle: source
+      target: '1753799988067'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: if-else
+        targetType: if-else
+      id: 1753799669136-false-1753799988067-target
+      selected: false
+      source: '1753799669136'
+      sourceHandle: 'false'
+      target: '1753799988067'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: if-else
+        targetType: assigner
+      id: 1753799988067-true-1753800038007-target
+      selected: false
+      source: '1753799988067'
+      sourceHandle: 'true'
+      target: '1753800038007'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: code
+      id: 1754381915051-source-1754381989734-target
+      selected: false
+      source: '1754381915051'
+      sourceHandle: source
+      target: '1754381989734'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1754381989734-source-1754382066397-target
+      selected: false
+      source: '1754381989734'
+      sourceHandle: source
+      target: '1754382066397'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: answer
+      id: 1754381915051-fail-branch-1754382082698-target
+      selected: false
+      source: '1754381915051'
+      sourceHandle: fail-branch
+      target: '1754382082698'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: loop
+      id: 1754382066397-source-1753161668061-target
+      selected: false
+      source: '1754382066397'
+      sourceHandle: source
+      target: '1753161668061'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: assigner
+        targetType: question-classifier
+      id: 1753162633470-source-1754383573523-target
+      selected: false
+      source: '1753162633470'
+      sourceHandle: source
+      target: '1754383573523'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: question-classifier
+        targetType: assigner
+      id: 1754383573523-1-1754383960236-target
+      source: '1754383573523'
+      sourceHandle: '1'
+      target: '1754383960236'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: assigner
+        targetType: if-else
+      id: 1754383960236-source-1753163155535-target
+      source: '1754383960236'
+      sourceHandle: source
+      target: '1753163155535'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: assigner
+        targetType: if-else
+      id: 1753800038007-source-1754384011771-target
+      source: '1753800038007'
+      sourceHandle: source
+      target: '1754384011771'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: if-else
+        targetType: assigner
+      id: 1754384011771-true-1754384030853-target
+      source: '1754384011771'
+      sourceHandle: 'true'
+      target: '1754384030853'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        sourceType: if-else
+        targetType: if-else
+      id: 1753799988067-false-1754384011771-target
+      source: '1753799988067'
+      sourceHandle: 'false'
+      target: '1754384011771'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInLoop: false
+        sourceType: agent
+        targetType: llm
+      id: 17524833319640-source-1754900346406-target
+      source: '17524833319640'
+      sourceHandle: source
+      target: '1754900346406'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: loop
+      id: 1754900346406-source-1753161668061-target
+      source: '1754900346406'
+      sourceHandle: source
+      target: '1753161668061'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: parameter-extractor
+      id: 1754922581960-source-1754922771359-target
+      source: '1754922581960'
+      sourceHandle: source
+      target: '1754922771359'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: assigner
+      id: 1754922972993-false-1752647191242-target
+      source: '1754922972993'
+      sourceHandle: 'false'
+      target: '1752647191242'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: assigner
+      id: 1754922771359-source-1754923023946-target
+      source: '1754922771359'
+      sourceHandle: source
+      target: '1754923023946'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: variable-aggregator
+      id: 1752647191242-source-1754923341220-target
+      source: '1752647191242'
+      sourceHandle: source
+      target: '1754923341220'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: assigner
+      id: 1752746496115-source-17549231552850-target
+      source: '1752746496115'
+      sourceHandle: source
+      target: '17549231552850'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1751250025987-source-1754922581960-target
+      source: '1751250025987'
+      sourceHandle: source
+      target: '1754922581960'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: variable-aggregator
+      id: 17549231552850-source-1754923341220-target
+      source: '17549231552850'
+      sourceHandle: source
+      target: '1754923341220'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: variable-aggregator
+        targetType: tool
+      id: 1754923341220-source-1754381915051-target
+      source: '1754923341220'
+      sourceHandle: source
+      target: '1754381915051'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: variable-aggregator
+        targetType: agent
+      id: 1754923341220-source-17524833319640-target
+      source: '1754923341220'
+      sourceHandle: source
+      target: '17524833319640'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: variable-aggregator
+        targetType: agent
+      id: 1754923341220-source-17524833289810-target
+      source: '1754923341220'
+      sourceHandle: source
+      target: '17524833289810'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: if-else
+      id: 1754923023946-source-1754922972993-target
+      source: '1754923023946'
+      sourceHandle: source
+      target: '1754922972993'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 53
+      id: '1751250025987'
+      position:
+        x: 30
+        y: 301.5
+      positionAbsolute:
+        x: 30
+        y: 301.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1752043064241.text#}}'
+        desc: 对接天气和路径
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 132
+      id: answer
+      position:
+        x: 4722
+        y: 301.5
+      positionAbsolute:
+        x: 4722
+        y: 301.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: chat
+          name: LightragModel:latest
+          provider: langgenius/ollama/ollama
+        prompt_template:
+        - id: c3c7f944-0e4e-4e88-9223-3e203d0562dc
+          role: system
+          text: 你是一个专业的应急灾害救援人员，你需要根据用户所提供的不同场景进行对症下药
+        - id: df90684b-2144-4d9a-a9f4-2b823396ca3a
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1752040353794'
+      position:
+        x: 4722
+        y: 501
+      positionAbsolute:
+        x: 4722
+        y: 501
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        classes:
+        - id: '1'
+          name: 日常对话并没有涉及应急救援相关的内容
+        - id: '2'
+          name: 当提及有关应急救援的内容，获得需要了解有关这一方面的法律法规
+        desc: ''
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        query_variable_selector:
+        - '1751250025987'
+        - sys.query
+        selected: false
+        title: 问题分类器
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 203
+      id: '1752042961128'
+      position:
+        x: 2462
+        y: 301.5
+      positionAbsolute:
+        x: 2462
+        y: 301.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: chat
+          name: Qwen/Qwen2.5-7B-Instruct
+          provider: langgenius/siliconflow/siliconflow
+        prompt_template:
+        - id: d098a449-9e8d-4bc7-9013-7ffd09dd3eb5
+          role: system
+          text: ''
+        - id: 1991c6cc-a076-4b0f-bde2-53e5d86c7ce7
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1752043064241'
+      position:
+        x: 2766
+        y: 301.5
+      positionAbsolute:
+        x: 2766
+        y: 301.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        agent_parameters:
+          instruction:
+            type: constant
+            value: '你是一位经验丰富的气象专家，具备严谨的专业判断力。请根据以下信息生成一份关于地点{{#1752746496115.city_name#}}客观的天气分析报告，当前的灾害类型为{{#1752746496115.disaster_type#}}：
+
+
+
+              【报告结构】
+
+              1. 当前天气系统分析
+
+                - 当前天气实况（包括天气现象、气温、湿度、风速风向、体感温度等）
+
+                - 当前是否存在天气预警及其详细信息
+
+                - 未来三天的精细化天气预报（包含天气现象、温度变化、风力等级、相对湿度波动、降水概率等）
+
+              2. 未来三天天气趋势分析（包含温度变化幅度、降水出现的时段、主要天气现象变化等）
+
+              3.灾害风险评估
+
+              基于当前实况与未来三天预报数据，从以下方面进行风险分析，并说明可能的触发原因及形成条件：
+
+              - 地质灾害风险：分析降水强度、持续时间与地形条件的关系，判断是否可能引发山体滑坡、泥石流等灾害，并给出风险等级。
+
+              - 气象灾害风险：结合风速、降水量、温度变化等要素，评估大风、强降水等对交通、建筑设施和城市排水系统的潜在影响。
+
+              - 森林火险等级：根据气温、湿度、风力及近期降水情况，判断可燃物干燥程度和火源扩散可能性，并给出火险等级。
+
+              4. 对于特殊灾害需要额外考虑的因素（这里主要是火灾）
+
+                 - 火灾风险评估：需要额外利用工具去查询目前的空气质量水平，以及当前空气是否健康，是否存在有毒物质，以及根据当天空气情况的一个建议。
+
+
+
+              【报告要求】
+
+              请仅输出事实性描述与趋势判断，不包含主观建议或行为指导。'
+          maximum_iterations:
+            type: constant
+            value: 1
+          mcp_servers_config:
+            type: constant
+            value: "{\n  \"mcpServers\": {\n    \"server_name2\": {\n      \"transport\"\
+              : \"sse\",\n      \"url\": \"http://host.docker.internal:8000/sse\"\
+              ,\n      \"headers\": {},\n      \"timeout\": 50,\n      \"sse_read_timeout\"\
+              : 50\n    }\n  }\n}\n"
+          model:
+            type: constant
+            value:
+              completion_params: {}
+              mode: chat
+              model: deepseek-chat
+              model_type: llm
+              provider: langgenius/deepseek/deepseek
+              type: model-selector
+          query:
+            type: constant
+            value: 获取{{#1752746496115.city_name#}}的天气信息，当前遇到的灾害类型为{{#1752746496115.disaster_type#}}
+        agent_strategy_label: FunctionCalling (支持 MCP 工具)
+        agent_strategy_name: mcp_sse_function_calling
+        agent_strategy_provider_name: junjiem/mcp_see_agent/mcp_see_agent
+        desc: ''
+        output_schema: null
+        plugin_unique_identifier: junjiem/mcp_see_agent:0.2.2@2b54607cf4d6a03b39cdae1425af2d8bafd4dd87f3eef6dc3eaaa945c71c2231
+        selected: true
+        title: Agent天气信息
+        tool_node_version: '2'
+        type: agent
+      height: 145
+      id: '17524833289810'
+      position:
+        x: 2742
+        y: 1685
+      positionAbsolute:
+        x: 2742
+        y: 1685
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        agent_parameters:
+          instruction:
+            type: constant
+            value: "你是一名信息呈现器，要出输出结果必须是表格形式\n输入是POI mcp中的route_summary的 JSON 格式的灾后要素数据，字段包括：类别、名称、地址、距离（米）。\n\
+              \n任务：\n1. 按“类别”分组输出，顺序固定为：\n   - 1.地理环境状态（山体、河流、湖泊）\n   - 2.医疗与救援资源可用性（医院、消防站、政府救援机构）\n\
+              \   - 3.显性与潜在风险点（易受灾点、高风险设施、人群暴露点）\n   - 4.避难场所与安置能力（官方避难所、可用酒店/宾馆/学校）\n\
+              \   - 5.教育设施受灾情况\n   - 6.大型公共设施状态\n2. 每类数据按“距离”字段升序排列。\n3. 每类单独输出一个\
+              \ Markdown 表格，表头固定为：\n   | 名称 | 地址 |  距离(米) | 附加信息 |\n4. “附加信息”栏若存在其他字段（如\
+              \ hydrology 水文数据、工具“水文”调用结果，若无法获取则跳过，对于学校通过tavily工具检索学校官网获取目前学校的师生人数），如无法通过工具获取信息则在改行的附加条件中写入位置信息，必须原样输出，不得删除或改写。\n\
+              5. 不允许合并、删减或省略任何记录，即使数据很多，也要分页或分批输出全部内容。\n6. 输出仅为markdown表格形式，不写主观描述、不做总结、不添加解释性语句。\n\
+              7. 原样输出输入数据中所有记录。"
+          maximum_iterations:
+            type: constant
+            value: 1
+          model:
+            type: constant
+            value:
+              completion_params: {}
+              mode: chat
+              model: deepseek-chat
+              model_type: llm
+              provider: langgenius/deepseek/deepseek
+              type: model-selector
+          query:
+            type: constant
+            value: 获取{{#1752746496115.incident_site#}}周围POI信息
+          tools:
+            type: constant
+            value:
+            - enabled: true
+              extra:
+                description: 使用 Tavily Extract 从一个或多个指定的 URL 提取网页内容。
+              parameters:
+                extract_depth:
+                  auto: 1
+                  value: null
+                urls:
+                  auto: 1
+                  value: null
+              provider_name: langgenius/tavily/tavily
+              provider_show_name: langgenius/tavily/tavily
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: One or more URLs to extract content from (comma-separated
+                    if multiple).
+                  ja_JP: One or more URLs to extract content from (comma-separated
+                    if multiple).
+                  pt_BR: One or more URLs to extract content from (comma-separated
+                    if multiple).
+                  zh_Hans: 要从中提取内容的一个或多个 URL（如果有多个，请用逗号分隔）。
+                label:
+                  en_US: URLs
+                  ja_JP: URLs
+                  pt_BR: URLs
+                  zh_Hans: URLs
+                llm_description: One or more URLs to extract content from (comma-separated
+                  if multiple).
+                max: null
+                min: null
+                name: urls
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Include a list of images extracted from the URLs in the response.
+                  ja_JP: Include a list of images extracted from the URLs in the response.
+                  pt_BR: Include a list of images extracted from the URLs in the response.
+                  zh_Hans: 在响应中包含从 URL 提取的图像列表。
+                label:
+                  en_US: Include Images
+                  ja_JP: Include Images
+                  pt_BR: Include Images
+                  zh_Hans: 包含图像
+                llm_description: Include images from the URLs in the response. Default
+                  is false.
+                max: null
+                min: null
+                name: include_images
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Include favicon URL for each result.
+                  ja_JP: Include favicon URL for each result.
+                  pt_BR: Include favicon URL for each result.
+                  zh_Hans: 包含每个结果的favicon URL。
+                label:
+                  en_US: Include Favicon
+                  ja_JP: Include Favicon
+                  pt_BR: Include Favicon
+                  zh_Hans: 包含Favicon
+                llm_description: When set to true, includes the favicon URL for each
+                  result.
+                max: null
+                min: null
+                name: include_favicon
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: basic
+                form: llm
+                human_description:
+                  en_US: The depth of the extraction process. 'advanced' retrieves
+                    more data but may increase latency and costs more credits.
+                  ja_JP: The depth of the extraction process. 'advanced' retrieves
+                    more data but may increase latency and costs more credits.
+                  pt_BR: The depth of the extraction process. 'advanced' retrieves
+                    more data but may increase latency and costs more credits.
+                  zh_Hans: 提取过程的深度。"advanced"检索更多数据，但可能增加延迟和消耗更多积分。
+                label:
+                  en_US: Extract Depth
+                  ja_JP: Extract Depth
+                  pt_BR: Extract Depth
+                  zh_Hans: 提取深度
+                llm_description: Extraction depth - 'basic' (default, faster) or 'advanced'
+                  (more data, higher cost).
+                max: null
+                min: null
+                name: extract_depth
+                options:
+                - icon: ''
+                  label:
+                    en_US: Basic
+                    ja_JP: Basic
+                    pt_BR: Basic
+                    zh_Hans: 基本
+                  value: basic
+                - icon: ''
+                  label:
+                    en_US: Advanced
+                    ja_JP: Advanced
+                    pt_BR: Advanced
+                    zh_Hans: 高级
+                  value: advanced
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              - auto_generate: null
+                default: markdown
+                form: form
+                human_description:
+                  en_US: The format of extracted content.
+                  ja_JP: The format of extracted content.
+                  pt_BR: The format of extracted content.
+                  zh_Hans: 提取内容的格式。
+                label:
+                  en_US: Content Format
+                  ja_JP: Content Format
+                  pt_BR: Content Format
+                  zh_Hans: 内容格式
+                llm_description: Format of extracted content - 'markdown' (default)
+                  or 'text' (plain text).
+                max: null
+                min: null
+                name: format
+                options:
+                - icon: ''
+                  label:
+                    en_US: Markdown
+                    ja_JP: Markdown
+                    pt_BR: Markdown
+                    zh_Hans: Markdown
+                  value: markdown
+                - icon: ''
+                  label:
+                    en_US: Text
+                    ja_JP: Text
+                    pt_BR: Text
+                    zh_Hans: 文本
+                  value: text
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              settings:
+                format:
+                  value:
+                    type: constant
+                    value: markdown
+                include_favicon:
+                  value:
+                    type: constant
+                    value: false
+                include_images:
+                  value:
+                    type: constant
+                    value: false
+              tool_description: 使用 Tavily Extract 从一个或多个指定的 URL 提取网页内容。
+              tool_label: Tavily Extract
+              tool_name: tavily_extract
+              type: builtin
+            - enabled: true
+              extra:
+                description: 专为人工智能代理 (LLM) 构建的搜索引擎工具，可快速提供实时、准确和真实的结果。
+              parameters:
+                country:
+                  auto: 1
+                  value: null
+                days:
+                  auto: 1
+                  value: null
+                exclude_domains:
+                  auto: 1
+                  value: null
+                include_domains:
+                  auto: 1
+                  value: null
+                query:
+                  auto: 1
+                  value: null
+                search_depth:
+                  auto: 1
+                  value: null
+                time_range:
+                  auto: 1
+                  value: null
+                topic:
+                  auto: 1
+                  value: null
+              provider_name: langgenius/tavily/tavily
+              provider_show_name: langgenius/tavily/tavily
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: The search query you want to execute with Tavily.
+                  ja_JP: The search query you want to execute with Tavily.
+                  pt_BR: The search query you want to execute with Tavily.
+                  zh_Hans: 您想用 Tavily 执行的搜索查询。
+                label:
+                  en_US: Query
+                  ja_JP: Query
+                  pt_BR: Query
+                  zh_Hans: 查询
+                llm_description: The search query.
+                max: null
+                min: null
+                name: query
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: basic
+                form: llm
+                human_description:
+                  en_US: The depth of the search.
+                  ja_JP: The depth of the search.
+                  pt_BR: The depth of the search.
+                  zh_Hans: 搜索的深度。
+                label:
+                  en_US: Search Depth
+                  ja_JP: Search Depth
+                  pt_BR: Search Depth
+                  zh_Hans: 搜索深度
+                llm_description: The depth of the search. 'basic' for standard search,
+                  'advanced' for more comprehensive results.
+                max: null
+                min: null
+                name: search_depth
+                options:
+                - icon: ''
+                  label:
+                    en_US: Basic
+                    ja_JP: Basic
+                    pt_BR: Basic
+                    zh_Hans: 基本
+                  value: basic
+                - icon: ''
+                  label:
+                    en_US: Advanced
+                    ja_JP: Advanced
+                    pt_BR: Advanced
+                    zh_Hans: 高级
+                  value: advanced
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              - auto_generate: null
+                default: general
+                form: llm
+                human_description:
+                  en_US: The category of the search.
+                  ja_JP: The category of the search.
+                  pt_BR: The category of the search.
+                  zh_Hans: 搜索的类别。
+                label:
+                  en_US: Topic
+                  ja_JP: Topic
+                  pt_BR: Topic
+                  zh_Hans: 主题
+                llm_description: The category of the search. Options include 'general',
+                  'news', or 'finance'.
+                max: null
+                min: null
+                name: topic
+                options:
+                - icon: ''
+                  label:
+                    en_US: General
+                    ja_JP: General
+                    pt_BR: General
+                    zh_Hans: 一般
+                  value: general
+                - icon: ''
+                  label:
+                    en_US: News
+                    ja_JP: News
+                    pt_BR: News
+                    zh_Hans: 新闻
+                  value: news
+                - icon: ''
+                  label:
+                    en_US: Finance
+                    ja_JP: Finance
+                    pt_BR: Finance
+                    zh_Hans: 金融
+                  value: finance
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              - auto_generate: null
+                default: 7
+                form: llm
+                human_description:
+                  en_US: The number of days back from the current date to include
+                    in the search results (only applicable when "topic" is "news").
+                  ja_JP: The number of days back from the current date to include
+                    in the search results (only applicable when "topic" is "news").
+                  pt_BR: The number of days back from the current date to include
+                    in the search results (only applicable when "topic" is "news").
+                  zh_Hans: 从当前日期起向前追溯的天数，以包含在搜索结果中（仅当"topic"为"news"时适用）。
+                label:
+                  en_US: Days
+                  ja_JP: Days
+                  pt_BR: Days
+                  zh_Hans: 天数
+                llm_description: The number of days back from the current date to
+                  include in the search results. Only applicable when "topic" is "news".
+                max: null
+                min: 1
+                name: days
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: number
+              - auto_generate: null
+                default: not_specified
+                form: llm
+                human_description:
+                  en_US: The time range back from the current date to filter results.
+                  ja_JP: The time range back from the current date to filter results.
+                  pt_BR: The time range back from the current date to filter results.
+                  zh_Hans: 从当前日期起向后筛选结果的时间范围。
+                label:
+                  en_US: Time Range
+                  ja_JP: Time Range
+                  pt_BR: Time Range
+                  zh_Hans: 时间范围
+                llm_description: The time range back from the current date to filter
+                  results. Options include 'not_specified', 'day', 'week', 'month',
+                  or 'year'.
+                max: null
+                min: null
+                name: time_range
+                options:
+                - icon: ''
+                  label:
+                    en_US: Not Specified
+                    ja_JP: Not Specified
+                    pt_BR: Not Specified
+                    zh_Hans: 不指定
+                  value: not_specified
+                - icon: ''
+                  label:
+                    en_US: Day
+                    ja_JP: Day
+                    pt_BR: Day
+                    zh_Hans: 天
+                  value: day
+                - icon: ''
+                  label:
+                    en_US: Week
+                    ja_JP: Week
+                    pt_BR: Week
+                    zh_Hans: 周
+                  value: week
+                - icon: ''
+                  label:
+                    en_US: Month
+                    ja_JP: Month
+                    pt_BR: Month
+                    zh_Hans: 月
+                  value: month
+                - icon: ''
+                  label:
+                    en_US: Year
+                    ja_JP: Year
+                    pt_BR: Year
+                    zh_Hans: 年
+                  value: year
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Automatically configure search parameters based on query
+                    content and intent.
+                  ja_JP: Automatically configure search parameters based on query
+                    content and intent.
+                  pt_BR: Automatically configure search parameters based on query
+                    content and intent.
+                  zh_Hans: 根据查询内容和意图自动配置搜索参数。
+                label:
+                  en_US: Auto Parameters
+                  ja_JP: Auto Parameters
+                  pt_BR: Auto Parameters
+                  zh_Hans: 自动参数
+                llm_description: When set to true, Tavily automatically configures
+                  search parameters based on your query.
+                max: null
+                min: null
+                name: auto_parameters
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Include a list of query-related images in the response.
+                  ja_JP: Include a list of query-related images in the response.
+                  pt_BR: Include a list of query-related images in the response.
+                  zh_Hans: 在响应中包含与查询相关的图片列表。
+                label:
+                  en_US: Include Images
+                  ja_JP: Include Images
+                  pt_BR: Include Images
+                  zh_Hans: 包含图片
+                llm_description: When set to true, includes a list of query-related
+                  images in the response.
+                max: null
+                min: null
+                name: include_images
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: When include_images is True, adds descriptive text for each
+                    image.
+                  ja_JP: When include_images is True, adds descriptive text for each
+                    image.
+                  pt_BR: When include_images is True, adds descriptive text for each
+                    image.
+                  zh_Hans: 当 include_images 为 True 时，为每个图像添加描述文本。
+                label:
+                  en_US: Include Image Descriptions
+                  ja_JP: Include Image Descriptions
+                  pt_BR: Include Image Descriptions
+                  zh_Hans: 包含图片描述
+                llm_description: When include_images is True and this is set to true,
+                  adds descriptive text for each image.
+                max: null
+                min: null
+                name: include_image_descriptions
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Include favicon URL for each result.
+                  ja_JP: Include favicon URL for each result.
+                  pt_BR: Include favicon URL for each result.
+                  zh_Hans: 包含每个结果的favicon URL。
+                label:
+                  en_US: Include Favicon
+                  ja_JP: Include Favicon
+                  pt_BR: Include Favicon
+                  zh_Hans: 包含Favicon
+                llm_description: When set to true, includes the favicon URL for each
+                  result.
+                max: null
+                min: null
+                name: include_favicon
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Include a short answer to the original query in the response.
+                  ja_JP: Include a short answer to the original query in the response.
+                  pt_BR: Include a short answer to the original query in the response.
+                  zh_Hans: 在响应中包含对原始查询的简短回答。
+                label:
+                  en_US: Include Answer
+                  ja_JP: Include Answer
+                  pt_BR: Include Answer
+                  zh_Hans: 包含答案
+                llm_description: When set to true, includes a short answer to the
+                  original query in the response.
+                max: null
+                min: null
+                name: include_answer
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Include the cleaned and parsed HTML content of each search
+                    result.
+                  ja_JP: Include the cleaned and parsed HTML content of each search
+                    result.
+                  pt_BR: Include the cleaned and parsed HTML content of each search
+                    result.
+                  zh_Hans: 包含每个搜索结果的已清理和解析的HTML内容。
+                label:
+                  en_US: Include Raw Content
+                  ja_JP: Include Raw Content
+                  pt_BR: Include Raw Content
+                  zh_Hans: 包含原始内容
+                llm_description: When set to true, includes the cleaned and parsed
+                  HTML content of each search result.
+                max: null
+                min: null
+                name: include_raw_content
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 5
+                form: form
+                human_description:
+                  en_US: The maximum number of search results to return.
+                  ja_JP: The maximum number of search results to return.
+                  pt_BR: The maximum number of search results to return.
+                  zh_Hans: 要返回的最大搜索结果数。
+                label:
+                  en_US: Max Results
+                  ja_JP: Max Results
+                  pt_BR: Max Results
+                  zh_Hans: 最大结果数
+                llm_description: The maximum number of search results to return. Range
+                  is 1-20.
+                max: 20
+                min: 1
+                name: max_results
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: number
+              - auto_generate: null
+                default: 3
+                form: form
+                human_description:
+                  en_US: Maximum number of content chunks returned per source (advanced
+                    search only).
+                  ja_JP: Maximum number of content chunks returned per source (advanced
+                    search only).
+                  pt_BR: Maximum number of content chunks returned per source (advanced
+                    search only).
+                  zh_Hans: 每个来源返回的内容片段的最大数量（仅限高级搜索）。
+                label:
+                  en_US: Chunks Per Source
+                  ja_JP: Chunks Per Source
+                  pt_BR: Chunks Per Source
+                  zh_Hans: 每来源片段数
+                llm_description: Maximum number of relevant content chunks (1-3) returned
+                  per source. Valid only when search_depth is advanced.
+                max: 3
+                min: 1
+                name: chunks_per_source
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: number
+              - auto_generate: null
+                default: united states
+                form: llm
+                human_description:
+                  en_US: Boost search results from a specific country (topic must
+                    be general).
+                  ja_JP: Boost search results from a specific country (topic must
+                    be general).
+                  pt_BR: Boost search results from a specific country (topic must
+                    be general).
+                  zh_Hans: 从特定国家/地区提升搜索结果（主题必须是general）。
+                label:
+                  en_US: Country
+                  ja_JP: Country
+                  pt_BR: Country
+                  zh_Hans: 国家
+                llm_description: Select a country to boost its content in results
+                  (only when topic is general).
+                max: null
+                min: null
+                name: country
+                options:
+                - icon: ''
+                  label:
+                    en_US: Afghanistan
+                    ja_JP: Afghanistan
+                    pt_BR: Afghanistan
+                    zh_Hans: 阿富汗
+                  value: afghanistan
+                - icon: ''
+                  label:
+                    en_US: Albania
+                    ja_JP: Albania
+                    pt_BR: Albania
+                    zh_Hans: 阿尔巴尼亚
+                  value: albania
+                - icon: ''
+                  label:
+                    en_US: Algeria
+                    ja_JP: Algeria
+                    pt_BR: Algeria
+                    zh_Hans: 阿尔及利亚
+                  value: algeria
+                - icon: ''
+                  label:
+                    en_US: Andorra
+                    ja_JP: Andorra
+                    pt_BR: Andorra
+                    zh_Hans: 安道尔
+                  value: andorra
+                - icon: ''
+                  label:
+                    en_US: Angola
+                    ja_JP: Angola
+                    pt_BR: Angola
+                    zh_Hans: 安哥拉
+                  value: angola
+                - icon: ''
+                  label:
+                    en_US: Argentina
+                    ja_JP: Argentina
+                    pt_BR: Argentina
+                    zh_Hans: 阿根廷
+                  value: argentina
+                - icon: ''
+                  label:
+                    en_US: Armenia
+                    ja_JP: Armenia
+                    pt_BR: Armenia
+                    zh_Hans: 亚美尼亚
+                  value: armenia
+                - icon: ''
+                  label:
+                    en_US: Australia
+                    ja_JP: Australia
+                    pt_BR: Australia
+                    zh_Hans: 澳大利亚
+                  value: australia
+                - icon: ''
+                  label:
+                    en_US: Austria
+                    ja_JP: Austria
+                    pt_BR: Austria
+                    zh_Hans: 奥地利
+                  value: austria
+                - icon: ''
+                  label:
+                    en_US: Azerbaijan
+                    ja_JP: Azerbaijan
+                    pt_BR: Azerbaijan
+                    zh_Hans: 阿塞拜疆
+                  value: azerbaijan
+                - icon: ''
+                  label:
+                    en_US: Bahamas
+                    ja_JP: Bahamas
+                    pt_BR: Bahamas
+                    zh_Hans: 巴哈马
+                  value: bahamas
+                - icon: ''
+                  label:
+                    en_US: Bahrain
+                    ja_JP: Bahrain
+                    pt_BR: Bahrain
+                    zh_Hans: 巴林
+                  value: bahrain
+                - icon: ''
+                  label:
+                    en_US: Bangladesh
+                    ja_JP: Bangladesh
+                    pt_BR: Bangladesh
+                    zh_Hans: 孟加拉国
+                  value: bangladesh
+                - icon: ''
+                  label:
+                    en_US: Barbados
+                    ja_JP: Barbados
+                    pt_BR: Barbados
+                    zh_Hans: 巴巴多斯
+                  value: barbados
+                - icon: ''
+                  label:
+                    en_US: Belarus
+                    ja_JP: Belarus
+                    pt_BR: Belarus
+                    zh_Hans: 白俄罗斯
+                  value: belarus
+                - icon: ''
+                  label:
+                    en_US: Belgium
+                    ja_JP: Belgium
+                    pt_BR: Belgium
+                    zh_Hans: 比利时
+                  value: belgium
+                - icon: ''
+                  label:
+                    en_US: Belize
+                    ja_JP: Belize
+                    pt_BR: Belize
+                    zh_Hans: 伯利兹
+                  value: belize
+                - icon: ''
+                  label:
+                    en_US: Benin
+                    ja_JP: Benin
+                    pt_BR: Benin
+                    zh_Hans: 贝宁
+                  value: benin
+                - icon: ''
+                  label:
+                    en_US: Bhutan
+                    ja_JP: Bhutan
+                    pt_BR: Bhutan
+                    zh_Hans: 不丹
+                  value: bhutan
+                - icon: ''
+                  label:
+                    en_US: Bolivia
+                    ja_JP: Bolivia
+                    pt_BR: Bolivia
+                    zh_Hans: 玻利维亚
+                  value: bolivia
+                - icon: ''
+                  label:
+                    en_US: Bosnia and Herzegovina
+                    ja_JP: Bosnia and Herzegovina
+                    pt_BR: Bosnia and Herzegovina
+                    zh_Hans: 波斯尼亚和黑塞哥维那
+                  value: bosnia and herzegovina
+                - icon: ''
+                  label:
+                    en_US: Botswana
+                    ja_JP: Botswana
+                    pt_BR: Botswana
+                    zh_Hans: 博茨瓦纳
+                  value: botswana
+                - icon: ''
+                  label:
+                    en_US: Brazil
+                    ja_JP: Brazil
+                    pt_BR: Brazil
+                    zh_Hans: 巴西
+                  value: brazil
+                - icon: ''
+                  label:
+                    en_US: Brunei
+                    ja_JP: Brunei
+                    pt_BR: Brunei
+                    zh_Hans: 文莱
+                  value: brunei
+                - icon: ''
+                  label:
+                    en_US: Bulgaria
+                    ja_JP: Bulgaria
+                    pt_BR: Bulgaria
+                    zh_Hans: 保加利亚
+                  value: bulgaria
+                - icon: ''
+                  label:
+                    en_US: Burkina Faso
+                    ja_JP: Burkina Faso
+                    pt_BR: Burkina Faso
+                    zh_Hans: 布基纳法索
+                  value: burkina faso
+                - icon: ''
+                  label:
+                    en_US: Burundi
+                    ja_JP: Burundi
+                    pt_BR: Burundi
+                    zh_Hans: 布隆迪
+                  value: burundi
+                - icon: ''
+                  label:
+                    en_US: Cambodia
+                    ja_JP: Cambodia
+                    pt_BR: Cambodia
+                    zh_Hans: 柬埔寨
+                  value: cambodia
+                - icon: ''
+                  label:
+                    en_US: Cameroon
+                    ja_JP: Cameroon
+                    pt_BR: Cameroon
+                    zh_Hans: 喀麦隆
+                  value: cameroon
+                - icon: ''
+                  label:
+                    en_US: Canada
+                    ja_JP: Canada
+                    pt_BR: Canada
+                    zh_Hans: 加拿大
+                  value: canada
+                - icon: ''
+                  label:
+                    en_US: Cape Verde
+                    ja_JP: Cape Verde
+                    pt_BR: Cape Verde
+                    zh_Hans: 佛得角
+                  value: cape verde
+                - icon: ''
+                  label:
+                    en_US: Central African Republic
+                    ja_JP: Central African Republic
+                    pt_BR: Central African Republic
+                    zh_Hans: 中非共和国
+                  value: central african republic
+                - icon: ''
+                  label:
+                    en_US: Chad
+                    ja_JP: Chad
+                    pt_BR: Chad
+                    zh_Hans: 乍得
+                  value: chad
+                - icon: ''
+                  label:
+                    en_US: Chile
+                    ja_JP: Chile
+                    pt_BR: Chile
+                    zh_Hans: 智利
+                  value: chile
+                - icon: ''
+                  label:
+                    en_US: China
+                    ja_JP: China
+                    pt_BR: China
+                    zh_Hans: 中国
+                  value: china
+                - icon: ''
+                  label:
+                    en_US: Colombia
+                    ja_JP: Colombia
+                    pt_BR: Colombia
+                    zh_Hans: 哥伦比亚
+                  value: colombia
+                - icon: ''
+                  label:
+                    en_US: Comoros
+                    ja_JP: Comoros
+                    pt_BR: Comoros
+                    zh_Hans: 科摩罗
+                  value: comoros
+                - icon: ''
+                  label:
+                    en_US: Congo
+                    ja_JP: Congo
+                    pt_BR: Congo
+                    zh_Hans: 刚果
+                  value: congo
+                - icon: ''
+                  label:
+                    en_US: Costa Rica
+                    ja_JP: Costa Rica
+                    pt_BR: Costa Rica
+                    zh_Hans: 哥斯达黎加
+                  value: costa rica
+                - icon: ''
+                  label:
+                    en_US: Croatia
+                    ja_JP: Croatia
+                    pt_BR: Croatia
+                    zh_Hans: 克罗地亚
+                  value: croatia
+                - icon: ''
+                  label:
+                    en_US: Cuba
+                    ja_JP: Cuba
+                    pt_BR: Cuba
+                    zh_Hans: 古巴
+                  value: cuba
+                - icon: ''
+                  label:
+                    en_US: Cyprus
+                    ja_JP: Cyprus
+                    pt_BR: Cyprus
+                    zh_Hans: 塞浦路斯
+                  value: cyprus
+                - icon: ''
+                  label:
+                    en_US: Czech Republic
+                    ja_JP: Czech Republic
+                    pt_BR: Czech Republic
+                    zh_Hans: 捷克共和国
+                  value: czech republic
+                - icon: ''
+                  label:
+                    en_US: Denmark
+                    ja_JP: Denmark
+                    pt_BR: Denmark
+                    zh_Hans: 丹麦
+                  value: denmark
+                - icon: ''
+                  label:
+                    en_US: Djibouti
+                    ja_JP: Djibouti
+                    pt_BR: Djibouti
+                    zh_Hans: 吉布提
+                  value: djibouti
+                - icon: ''
+                  label:
+                    en_US: Dominican Republic
+                    ja_JP: Dominican Republic
+                    pt_BR: Dominican Republic
+                    zh_Hans: 多米尼加共和国
+                  value: dominican republic
+                - icon: ''
+                  label:
+                    en_US: Ecuador
+                    ja_JP: Ecuador
+                    pt_BR: Ecuador
+                    zh_Hans: 厄瓜多尔
+                  value: ecuador
+                - icon: ''
+                  label:
+                    en_US: Egypt
+                    ja_JP: Egypt
+                    pt_BR: Egypt
+                    zh_Hans: 埃及
+                  value: egypt
+                - icon: ''
+                  label:
+                    en_US: El Salvador
+                    ja_JP: El Salvador
+                    pt_BR: El Salvador
+                    zh_Hans: 萨尔瓦多
+                  value: el salvador
+                - icon: ''
+                  label:
+                    en_US: Equatorial Guinea
+                    ja_JP: Equatorial Guinea
+                    pt_BR: Equatorial Guinea
+                    zh_Hans: 赤道几内亚
+                  value: equatorial guinea
+                - icon: ''
+                  label:
+                    en_US: Eritrea
+                    ja_JP: Eritrea
+                    pt_BR: Eritrea
+                    zh_Hans: 厄立特里亚
+                  value: eritrea
+                - icon: ''
+                  label:
+                    en_US: Estonia
+                    ja_JP: Estonia
+                    pt_BR: Estonia
+                    zh_Hans: 爱沙尼亚
+                  value: estonia
+                - icon: ''
+                  label:
+                    en_US: Ethiopia
+                    ja_JP: Ethiopia
+                    pt_BR: Ethiopia
+                    zh_Hans: 埃塞俄比亚
+                  value: ethiopia
+                - icon: ''
+                  label:
+                    en_US: Fiji
+                    ja_JP: Fiji
+                    pt_BR: Fiji
+                    zh_Hans: 斐济
+                  value: fiji
+                - icon: ''
+                  label:
+                    en_US: Finland
+                    ja_JP: Finland
+                    pt_BR: Finland
+                    zh_Hans: 芬兰
+                  value: finland
+                - icon: ''
+                  label:
+                    en_US: France
+                    ja_JP: France
+                    pt_BR: France
+                    zh_Hans: 法国
+                  value: france
+                - icon: ''
+                  label:
+                    en_US: Gabon
+                    ja_JP: Gabon
+                    pt_BR: Gabon
+                    zh_Hans: 加蓬
+                  value: gabon
+                - icon: ''
+                  label:
+                    en_US: Gambia
+                    ja_JP: Gambia
+                    pt_BR: Gambia
+                    zh_Hans: 冈比亚
+                  value: gambia
+                - icon: ''
+                  label:
+                    en_US: Georgia
+                    ja_JP: Georgia
+                    pt_BR: Georgia
+                    zh_Hans: 格鲁吉亚
+                  value: georgia
+                - icon: ''
+                  label:
+                    en_US: Germany
+                    ja_JP: Germany
+                    pt_BR: Germany
+                    zh_Hans: 德国
+                  value: germany
+                - icon: ''
+                  label:
+                    en_US: Ghana
+                    ja_JP: Ghana
+                    pt_BR: Ghana
+                    zh_Hans: 加纳
+                  value: ghana
+                - icon: ''
+                  label:
+                    en_US: Greece
+                    ja_JP: Greece
+                    pt_BR: Greece
+                    zh_Hans: 希腊
+                  value: greece
+                - icon: ''
+                  label:
+                    en_US: Guatemala
+                    ja_JP: Guatemala
+                    pt_BR: Guatemala
+                    zh_Hans: 危地马拉
+                  value: guatemala
+                - icon: ''
+                  label:
+                    en_US: Guinea
+                    ja_JP: Guinea
+                    pt_BR: Guinea
+                    zh_Hans: 几内亚
+                  value: guinea
+                - icon: ''
+                  label:
+                    en_US: Haiti
+                    ja_JP: Haiti
+                    pt_BR: Haiti
+                    zh_Hans: 海地
+                  value: haiti
+                - icon: ''
+                  label:
+                    en_US: Honduras
+                    ja_JP: Honduras
+                    pt_BR: Honduras
+                    zh_Hans: 洪都拉斯
+                  value: honduras
+                - icon: ''
+                  label:
+                    en_US: Hungary
+                    ja_JP: Hungary
+                    pt_BR: Hungary
+                    zh_Hans: 匈牙利
+                  value: hungary
+                - icon: ''
+                  label:
+                    en_US: Iceland
+                    ja_JP: Iceland
+                    pt_BR: Iceland
+                    zh_Hans: 冰岛
+                  value: iceland
+                - icon: ''
+                  label:
+                    en_US: India
+                    ja_JP: India
+                    pt_BR: India
+                    zh_Hans: 印度
+                  value: india
+                - icon: ''
+                  label:
+                    en_US: Indonesia
+                    ja_JP: Indonesia
+                    pt_BR: Indonesia
+                    zh_Hans: 印度尼西亚
+                  value: indonesia
+                - icon: ''
+                  label:
+                    en_US: Iran
+                    ja_JP: Iran
+                    pt_BR: Iran
+                    zh_Hans: 伊朗
+                  value: iran
+                - icon: ''
+                  label:
+                    en_US: Iraq
+                    ja_JP: Iraq
+                    pt_BR: Iraq
+                    zh_Hans: 伊拉克
+                  value: iraq
+                - icon: ''
+                  label:
+                    en_US: Ireland
+                    ja_JP: Ireland
+                    pt_BR: Ireland
+                    zh_Hans: 爱尔兰
+                  value: ireland
+                - icon: ''
+                  label:
+                    en_US: Israel
+                    ja_JP: Israel
+                    pt_BR: Israel
+                    zh_Hans: 以色列
+                  value: israel
+                - icon: ''
+                  label:
+                    en_US: Italy
+                    ja_JP: Italy
+                    pt_BR: Italy
+                    zh_Hans: 意大利
+                  value: italy
+                - icon: ''
+                  label:
+                    en_US: Jamaica
+                    ja_JP: Jamaica
+                    pt_BR: Jamaica
+                    zh_Hans: 牙买加
+                  value: jamaica
+                - icon: ''
+                  label:
+                    en_US: Japan
+                    ja_JP: Japan
+                    pt_BR: Japan
+                    zh_Hans: 日本
+                  value: japan
+                - icon: ''
+                  label:
+                    en_US: Jordan
+                    ja_JP: Jordan
+                    pt_BR: Jordan
+                    zh_Hans: 约旦
+                  value: jordan
+                - icon: ''
+                  label:
+                    en_US: Kazakhstan
+                    ja_JP: Kazakhstan
+                    pt_BR: Kazakhstan
+                    zh_Hans: 哈萨克斯坦
+                  value: kazakhstan
+                - icon: ''
+                  label:
+                    en_US: Kenya
+                    ja_JP: Kenya
+                    pt_BR: Kenya
+                    zh_Hans: 肯尼亚
+                  value: kenya
+                - icon: ''
+                  label:
+                    en_US: Kuwait
+                    ja_JP: Kuwait
+                    pt_BR: Kuwait
+                    zh_Hans: 科威特
+                  value: kuwait
+                - icon: ''
+                  label:
+                    en_US: Kyrgyzstan
+                    ja_JP: Kyrgyzstan
+                    pt_BR: Kyrgyzstan
+                    zh_Hans: 吉尔吉斯斯坦
+                  value: kyrgyzstan
+                - icon: ''
+                  label:
+                    en_US: Latvia
+                    ja_JP: Latvia
+                    pt_BR: Latvia
+                    zh_Hans: 拉脱维亚
+                  value: latvia
+                - icon: ''
+                  label:
+                    en_US: Lebanon
+                    ja_JP: Lebanon
+                    pt_BR: Lebanon
+                    zh_Hans: 黎巴嫩
+                  value: lebanon
+                - icon: ''
+                  label:
+                    en_US: Lesotho
+                    ja_JP: Lesotho
+                    pt_BR: Lesotho
+                    zh_Hans: 莱索托
+                  value: lesotho
+                - icon: ''
+                  label:
+                    en_US: Liberia
+                    ja_JP: Liberia
+                    pt_BR: Liberia
+                    zh_Hans: 利比里亚
+                  value: liberia
+                - icon: ''
+                  label:
+                    en_US: Libya
+                    ja_JP: Libya
+                    pt_BR: Libya
+                    zh_Hans: 利比亚
+                  value: libya
+                - icon: ''
+                  label:
+                    en_US: Liechtenstein
+                    ja_JP: Liechtenstein
+                    pt_BR: Liechtenstein
+                    zh_Hans: 列支敦士登
+                  value: liechtenstein
+                - icon: ''
+                  label:
+                    en_US: Lithuania
+                    ja_JP: Lithuania
+                    pt_BR: Lithuania
+                    zh_Hans: 立陶宛
+                  value: lithuania
+                - icon: ''
+                  label:
+                    en_US: Luxembourg
+                    ja_JP: Luxembourg
+                    pt_BR: Luxembourg
+                    zh_Hans: 卢森堡
+                  value: luxembourg
+                - icon: ''
+                  label:
+                    en_US: Madagascar
+                    ja_JP: Madagascar
+                    pt_BR: Madagascar
+                    zh_Hans: 马达加斯加
+                  value: madagascar
+                - icon: ''
+                  label:
+                    en_US: Malawi
+                    ja_JP: Malawi
+                    pt_BR: Malawi
+                    zh_Hans: 马拉维
+                  value: malawi
+                - icon: ''
+                  label:
+                    en_US: Malaysia
+                    ja_JP: Malaysia
+                    pt_BR: Malaysia
+                    zh_Hans: 马来西亚
+                  value: malaysia
+                - icon: ''
+                  label:
+                    en_US: Maldives
+                    ja_JP: Maldives
+                    pt_BR: Maldives
+                    zh_Hans: 马尔代夫
+                  value: maldives
+                - icon: ''
+                  label:
+                    en_US: Mali
+                    ja_JP: Mali
+                    pt_BR: Mali
+                    zh_Hans: 马里
+                  value: mali
+                - icon: ''
+                  label:
+                    en_US: Malta
+                    ja_JP: Malta
+                    pt_BR: Malta
+                    zh_Hans: 马耳他
+                  value: malta
+                - icon: ''
+                  label:
+                    en_US: Mauritania
+                    ja_JP: Mauritania
+                    pt_BR: Mauritania
+                    zh_Hans: 毛里塔尼亚
+                  value: mauritania
+                - icon: ''
+                  label:
+                    en_US: Mauritius
+                    ja_JP: Mauritius
+                    pt_BR: Mauritius
+                    zh_Hans: 毛里求斯
+                  value: mauritius
+                - icon: ''
+                  label:
+                    en_US: Mexico
+                    ja_JP: Mexico
+                    pt_BR: Mexico
+                    zh_Hans: 墨西哥
+                  value: mexico
+                - icon: ''
+                  label:
+                    en_US: Moldova
+                    ja_JP: Moldova
+                    pt_BR: Moldova
+                    zh_Hans: 摩尔多瓦
+                  value: moldova
+                - icon: ''
+                  label:
+                    en_US: Monaco
+                    ja_JP: Monaco
+                    pt_BR: Monaco
+                    zh_Hans: 摩纳哥
+                  value: monaco
+                - icon: ''
+                  label:
+                    en_US: Mongolia
+                    ja_JP: Mongolia
+                    pt_BR: Mongolia
+                    zh_Hans: 蒙古
+                  value: mongolia
+                - icon: ''
+                  label:
+                    en_US: Montenegro
+                    ja_JP: Montenegro
+                    pt_BR: Montenegro
+                    zh_Hans: 黑山
+                  value: montenegro
+                - icon: ''
+                  label:
+                    en_US: Morocco
+                    ja_JP: Morocco
+                    pt_BR: Morocco
+                    zh_Hans: 摩洛哥
+                  value: morocco
+                - icon: ''
+                  label:
+                    en_US: Mozambique
+                    ja_JP: Mozambique
+                    pt_BR: Mozambique
+                    zh_Hans: 莫桑比克
+                  value: mozambique
+                - icon: ''
+                  label:
+                    en_US: Myanmar
+                    ja_JP: Myanmar
+                    pt_BR: Myanmar
+                    zh_Hans: 缅甸
+                  value: myanmar
+                - icon: ''
+                  label:
+                    en_US: Namibia
+                    ja_JP: Namibia
+                    pt_BR: Namibia
+                    zh_Hans: 纳米比亚
+                  value: namibia
+                - icon: ''
+                  label:
+                    en_US: Nepal
+                    ja_JP: Nepal
+                    pt_BR: Nepal
+                    zh_Hans: 尼泊尔
+                  value: nepal
+                - icon: ''
+                  label:
+                    en_US: Netherlands
+                    ja_JP: Netherlands
+                    pt_BR: Netherlands
+                    zh_Hans: 荷兰
+                  value: netherlands
+                - icon: ''
+                  label:
+                    en_US: New Zealand
+                    ja_JP: New Zealand
+                    pt_BR: New Zealand
+                    zh_Hans: 新西兰
+                  value: new zealand
+                - icon: ''
+                  label:
+                    en_US: Nicaragua
+                    ja_JP: Nicaragua
+                    pt_BR: Nicaragua
+                    zh_Hans: 尼加拉瓜
+                  value: nicaragua
+                - icon: ''
+                  label:
+                    en_US: Niger
+                    ja_JP: Niger
+                    pt_BR: Niger
+                    zh_Hans: 尼日尔
+                  value: niger
+                - icon: ''
+                  label:
+                    en_US: Nigeria
+                    ja_JP: Nigeria
+                    pt_BR: Nigeria
+                    zh_Hans: 尼日利亚
+                  value: nigeria
+                - icon: ''
+                  label:
+                    en_US: North Korea
+                    ja_JP: North Korea
+                    pt_BR: North Korea
+                    zh_Hans: 朝鲜
+                  value: north korea
+                - icon: ''
+                  label:
+                    en_US: North Macedonia
+                    ja_JP: North Macedonia
+                    pt_BR: North Macedonia
+                    zh_Hans: 北马其顿
+                  value: north macedonia
+                - icon: ''
+                  label:
+                    en_US: Norway
+                    ja_JP: Norway
+                    pt_BR: Norway
+                    zh_Hans: 挪威
+                  value: norway
+                - icon: ''
+                  label:
+                    en_US: Oman
+                    ja_JP: Oman
+                    pt_BR: Oman
+                    zh_Hans: 阿曼
+                  value: oman
+                - icon: ''
+                  label:
+                    en_US: Pakistan
+                    ja_JP: Pakistan
+                    pt_BR: Pakistan
+                    zh_Hans: 巴基斯坦
+                  value: pakistan
+                - icon: ''
+                  label:
+                    en_US: Panama
+                    ja_JP: Panama
+                    pt_BR: Panama
+                    zh_Hans: 巴拿马
+                  value: panama
+                - icon: ''
+                  label:
+                    en_US: Papua New Guinea
+                    ja_JP: Papua New Guinea
+                    pt_BR: Papua New Guinea
+                    zh_Hans: 巴布亚新几内亚
+                  value: papua new guinea
+                - icon: ''
+                  label:
+                    en_US: Paraguay
+                    ja_JP: Paraguay
+                    pt_BR: Paraguay
+                    zh_Hans: 巴拉圭
+                  value: paraguay
+                - icon: ''
+                  label:
+                    en_US: Peru
+                    ja_JP: Peru
+                    pt_BR: Peru
+                    zh_Hans: 秘鲁
+                  value: peru
+                - icon: ''
+                  label:
+                    en_US: Philippines
+                    ja_JP: Philippines
+                    pt_BR: Philippines
+                    zh_Hans: 菲律宾
+                  value: philippines
+                - icon: ''
+                  label:
+                    en_US: Poland
+                    ja_JP: Poland
+                    pt_BR: Poland
+                    zh_Hans: 波兰
+                  value: poland
+                - icon: ''
+                  label:
+                    en_US: Portugal
+                    ja_JP: Portugal
+                    pt_BR: Portugal
+                    zh_Hans: 葡萄牙
+                  value: portugal
+                - icon: ''
+                  label:
+                    en_US: Qatar
+                    ja_JP: Qatar
+                    pt_BR: Qatar
+                    zh_Hans: 卡塔尔
+                  value: qatar
+                - icon: ''
+                  label:
+                    en_US: Romania
+                    ja_JP: Romania
+                    pt_BR: Romania
+                    zh_Hans: 罗马尼亚
+                  value: romania
+                - icon: ''
+                  label:
+                    en_US: Russia
+                    ja_JP: Russia
+                    pt_BR: Russia
+                    zh_Hans: 俄罗斯
+                  value: russia
+                - icon: ''
+                  label:
+                    en_US: Rwanda
+                    ja_JP: Rwanda
+                    pt_BR: Rwanda
+                    zh_Hans: 卢旺达
+                  value: rwanda
+                - icon: ''
+                  label:
+                    en_US: Saudi Arabia
+                    ja_JP: Saudi Arabia
+                    pt_BR: Saudi Arabia
+                    zh_Hans: 沙特阿拉伯
+                  value: saudi arabia
+                - icon: ''
+                  label:
+                    en_US: Senegal
+                    ja_JP: Senegal
+                    pt_BR: Senegal
+                    zh_Hans: 塞内加尔
+                  value: senegal
+                - icon: ''
+                  label:
+                    en_US: Serbia
+                    ja_JP: Serbia
+                    pt_BR: Serbia
+                    zh_Hans: 塞尔维亚
+                  value: serbia
+                - icon: ''
+                  label:
+                    en_US: Singapore
+                    ja_JP: Singapore
+                    pt_BR: Singapore
+                    zh_Hans: 新加坡
+                  value: singapore
+                - icon: ''
+                  label:
+                    en_US: Slovakia
+                    ja_JP: Slovakia
+                    pt_BR: Slovakia
+                    zh_Hans: 斯洛伐克
+                  value: slovakia
+                - icon: ''
+                  label:
+                    en_US: Slovenia
+                    ja_JP: Slovenia
+                    pt_BR: Slovenia
+                    zh_Hans: 斯洛文尼亚
+                  value: slovenia
+                - icon: ''
+                  label:
+                    en_US: Somalia
+                    ja_JP: Somalia
+                    pt_BR: Somalia
+                    zh_Hans: 索马里
+                  value: somalia
+                - icon: ''
+                  label:
+                    en_US: South Africa
+                    ja_JP: South Africa
+                    pt_BR: South Africa
+                    zh_Hans: 南非
+                  value: south africa
+                - icon: ''
+                  label:
+                    en_US: South Korea
+                    ja_JP: South Korea
+                    pt_BR: South Korea
+                    zh_Hans: 韩国
+                  value: south korea
+                - icon: ''
+                  label:
+                    en_US: South Sudan
+                    ja_JP: South Sudan
+                    pt_BR: South Sudan
+                    zh_Hans: 南苏丹
+                  value: south sudan
+                - icon: ''
+                  label:
+                    en_US: Spain
+                    ja_JP: Spain
+                    pt_BR: Spain
+                    zh_Hans: 西班牙
+                  value: spain
+                - icon: ''
+                  label:
+                    en_US: Sri Lanka
+                    ja_JP: Sri Lanka
+                    pt_BR: Sri Lanka
+                    zh_Hans: 斯里兰卡
+                  value: sri lanka
+                - icon: ''
+                  label:
+                    en_US: Sudan
+                    ja_JP: Sudan
+                    pt_BR: Sudan
+                    zh_Hans: 苏丹
+                  value: sudan
+                - icon: ''
+                  label:
+                    en_US: Sweden
+                    ja_JP: Sweden
+                    pt_BR: Sweden
+                    zh_Hans: 瑞典
+                  value: sweden
+                - icon: ''
+                  label:
+                    en_US: Switzerland
+                    ja_JP: Switzerland
+                    pt_BR: Switzerland
+                    zh_Hans: 瑞士
+                  value: switzerland
+                - icon: ''
+                  label:
+                    en_US: Syria
+                    ja_JP: Syria
+                    pt_BR: Syria
+                    zh_Hans: 叙利亚
+                  value: syria
+                - icon: ''
+                  label:
+                    en_US: Taiwan
+                    ja_JP: Taiwan
+                    pt_BR: Taiwan
+                    zh_Hans: 台湾
+                  value: taiwan
+                - icon: ''
+                  label:
+                    en_US: Tajikistan
+                    ja_JP: Tajikistan
+                    pt_BR: Tajikistan
+                    zh_Hans: 塔吉克斯坦
+                  value: tajikistan
+                - icon: ''
+                  label:
+                    en_US: Tanzania
+                    ja_JP: Tanzania
+                    pt_BR: Tanzania
+                    zh_Hans: 坦桑尼亚
+                  value: tanzania
+                - icon: ''
+                  label:
+                    en_US: Thailand
+                    ja_JP: Thailand
+                    pt_BR: Thailand
+                    zh_Hans: 泰国
+                  value: thailand
+                - icon: ''
+                  label:
+                    en_US: Togo
+                    ja_JP: Togo
+                    pt_BR: Togo
+                    zh_Hans: 多哥
+                  value: togo
+                - icon: ''
+                  label:
+                    en_US: Trinidad and Tobago
+                    ja_JP: Trinidad and Tobago
+                    pt_BR: Trinidad and Tobago
+                    zh_Hans: 特立尼达和多巴哥
+                  value: trinidad and tobago
+                - icon: ''
+                  label:
+                    en_US: Tunisia
+                    ja_JP: Tunisia
+                    pt_BR: Tunisia
+                    zh_Hans: 突尼斯
+                  value: tunisia
+                - icon: ''
+                  label:
+                    en_US: Turkey
+                    ja_JP: Turkey
+                    pt_BR: Turkey
+                    zh_Hans: 土耳其
+                  value: turkey
+                - icon: ''
+                  label:
+                    en_US: Turkmenistan
+                    ja_JP: Turkmenistan
+                    pt_BR: Turkmenistan
+                    zh_Hans: 土库曼斯坦
+                  value: turkmenistan
+                - icon: ''
+                  label:
+                    en_US: Uganda
+                    ja_JP: Uganda
+                    pt_BR: Uganda
+                    zh_Hans: 乌干达
+                  value: uganda
+                - icon: ''
+                  label:
+                    en_US: Ukraine
+                    ja_JP: Ukraine
+                    pt_BR: Ukraine
+                    zh_Hans: 乌克兰
+                  value: ukraine
+                - icon: ''
+                  label:
+                    en_US: United Arab Emirates
+                    ja_JP: United Arab Emirates
+                    pt_BR: United Arab Emirates
+                    zh_Hans: 阿拉伯联合酋长国
+                  value: united arab emirates
+                - icon: ''
+                  label:
+                    en_US: United Kingdom
+                    ja_JP: United Kingdom
+                    pt_BR: United Kingdom
+                    zh_Hans: 英国
+                  value: united kingdom
+                - icon: ''
+                  label:
+                    en_US: United States
+                    ja_JP: United States
+                    pt_BR: United States
+                    zh_Hans: 美国
+                  value: united states
+                - icon: ''
+                  label:
+                    en_US: Uruguay
+                    ja_JP: Uruguay
+                    pt_BR: Uruguay
+                    zh_Hans: 乌拉圭
+                  value: uruguay
+                - icon: ''
+                  label:
+                    en_US: Uzbekistan
+                    ja_JP: Uzbekistan
+                    pt_BR: Uzbekistan
+                    zh_Hans: 乌兹别克斯坦
+                  value: uzbekistan
+                - icon: ''
+                  label:
+                    en_US: Venezuela
+                    ja_JP: Venezuela
+                    pt_BR: Venezuela
+                    zh_Hans: 委内瑞拉
+                  value: venezuela
+                - icon: ''
+                  label:
+                    en_US: Vietnam
+                    ja_JP: Vietnam
+                    pt_BR: Vietnam
+                    zh_Hans: 越南
+                  value: vietnam
+                - icon: ''
+                  label:
+                    en_US: Yemen
+                    ja_JP: Yemen
+                    pt_BR: Yemen
+                    zh_Hans: 也门
+                  value: yemen
+                - icon: ''
+                  label:
+                    en_US: Zambia
+                    ja_JP: Zambia
+                    pt_BR: Zambia
+                    zh_Hans: 赞比亚
+                  value: zambia
+                - icon: ''
+                  label:
+                    en_US: Zimbabwe
+                    ja_JP: Zimbabwe
+                    pt_BR: Zimbabwe
+                    zh_Hans: 津巴布韦
+                  value: zimbabwe
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: A comma-separated list of domains to specifically include
+                    in the search results.
+                  ja_JP: A comma-separated list of domains to specifically include
+                    in the search results.
+                  pt_BR: A comma-separated list of domains to specifically include
+                    in the search results.
+                  zh_Hans: 要在搜索结果中特别包含的域的逗号分隔列表。
+                label:
+                  en_US: Include Domains
+                  ja_JP: Include Domains
+                  pt_BR: Include Domains
+                  zh_Hans: 包含域
+                llm_description: A comma-separated list of domains to specifically
+                  include in the search results.
+                max: null
+                min: null
+                name: include_domains
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: A comma-separated list of domains to specifically exclude
+                    from the search results.
+                  ja_JP: A comma-separated list of domains to specifically exclude
+                    from the search results.
+                  pt_BR: A comma-separated list of domains to specifically exclude
+                    from the search results.
+                  zh_Hans: 要从搜索结果中特别排除的域的逗号分隔列表。
+                label:
+                  en_US: Exclude Domains
+                  ja_JP: Exclude Domains
+                  pt_BR: Exclude Domains
+                  zh_Hans: 排除域
+                llm_description: A comma-separated list of domains to specifically
+                  exclude from the search results.
+                max: null
+                min: null
+                name: exclude_domains
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              settings:
+                auto_parameters:
+                  value:
+                    type: constant
+                    value: false
+                chunks_per_source:
+                  value:
+                    type: constant
+                    value: 3
+                include_answer:
+                  value:
+                    type: constant
+                    value: false
+                include_favicon:
+                  value:
+                    type: constant
+                    value: false
+                include_image_descriptions:
+                  value:
+                    type: constant
+                    value: false
+                include_images:
+                  value:
+                    type: constant
+                    value: false
+                include_raw_content:
+                  value:
+                    type: constant
+                    value: false
+                max_results:
+                  value:
+                    type: constant
+                    value: 5
+              tool_description: 专为人工智能代理 (LLM) 构建的搜索引擎工具，可快速提供实时、准确和真实的结果。
+              tool_label: Tavily Search
+              tool_name: tavily_search
+              type: builtin
+            - enabled: true
+              extra:
+                description: "根据输入的地址信息和城市名，获取：\n1. 该地址的经纬度坐标；\n2. 该地址的详细行政区划信息；\n\
+                  3. 该地址周边的重点设施与地理要素信息。\n\n参数:\n    address (str): 详细地址，例如“杭州市滨江区江南大道588号”\n\
+                  \    city_name (str): 城市名称，例如“杭州”\n\n返回:\n    格式化字符串，包含经纬度、地址解析结果和周边POI信息"
+              parameters:
+                address:
+                  auto: 1
+                  value: null
+                city_name:
+                  auto: 1
+                  value: null
+              provider_name: get_summary
+              provider_show_name: POI
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: ''
+                  ja_JP: ''
+                  pt_BR: ''
+                  zh_Hans: ''
+                label:
+                  en_US: address
+                  ja_JP: address
+                  pt_BR: address
+                  zh_Hans: address
+                llm_description: ''
+                max: null
+                min: null
+                name: address
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: ''
+                  ja_JP: ''
+                  pt_BR: ''
+                  zh_Hans: ''
+                label:
+                  en_US: city_name
+                  ja_JP: city_name
+                  pt_BR: city_name
+                  zh_Hans: city_name
+                llm_description: ''
+                max: null
+                min: null
+                name: city_name
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: "根据输入的地址信息和城市名，获取：\n1. 该地址的经纬度坐标；\n2. 该地址的详细行政区划信息；\n\
+                3. 该地址周边的重点设施与地理要素信息。\n\n参数:\n    address (str): 详细地址，例如“杭州市滨江区江南大道588号”\n\
+                \    city_name (str): 城市名称，例如“杭州”\n\n返回:\n    格式化字符串，包含经纬度、地址解析结果和周边POI信息"
+              tool_label: route_summary
+              tool_name: route_summary
+              type: mcp
+            - enabled: false
+              extra:
+                description: "获取指定水文站的综合水文信息摘要\n参数:\n    station_id: 水文站ID (例如: '01491000')\n\
+                  返回:\n    格式化的水文信息摘要文本"
+              parameters:
+                station_id:
+                  auto: 1
+                  value: null
+              provider_name: hydrologymcp
+              provider_show_name: 水文
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: ''
+                  ja_JP: ''
+                  pt_BR: ''
+                  zh_Hans: ''
+                label:
+                  en_US: station_id
+                  ja_JP: station_id
+                  pt_BR: station_id
+                  zh_Hans: station_id
+                llm_description: ''
+                max: null
+                min: null
+                name: station_id
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: "获取指定水文站的综合水文信息摘要\n参数:\n    station_id: 水文站ID (例如:\
+                \ '01491000')\n返回:\n    格式化的水文信息摘要文本"
+              tool_label: hydrology_summary
+              tool_name: hydrology_summary
+              type: mcp
+            - enabled: false
+              extra:
+                description: "获取水文站的历史趋势数据\n参数:\n    station_id: 水文站ID\n    days:\
+                  \ 要查询的历史天数 (默认7天)\n返回:\n    格式化的历史趋势摘要"
+              parameters:
+                days:
+                  auto: 1
+                  value: null
+                station_id:
+                  auto: 1
+                  value: null
+              provider_name: hydrologymcp
+              provider_show_name: 水文
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: ''
+                  ja_JP: ''
+                  pt_BR: ''
+                  zh_Hans: ''
+                label:
+                  en_US: station_id
+                  ja_JP: station_id
+                  pt_BR: station_id
+                  zh_Hans: station_id
+                llm_description: ''
+                max: null
+                min: null
+                name: station_id
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: ''
+                  ja_JP: ''
+                  pt_BR: ''
+                  zh_Hans: ''
+                label:
+                  en_US: days
+                  ja_JP: days
+                  pt_BR: days
+                  zh_Hans: days
+                llm_description: ''
+                max: null
+                min: null
+                name: days
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: number
+              settings: {}
+              tool_description: "获取水文站的历史趋势数据\n参数:\n    station_id: 水文站ID\n    days:\
+                \ 要查询的历史天数 (默认7天)\n返回:\n    格式化的历史趋势摘要"
+              tool_label: get_hydrology_trend
+              tool_name: get_hydrology_trend
+              type: mcp
+        agent_strategy_label: FunctionCalling
+        agent_strategy_name: function_calling
+        agent_strategy_provider_name: langgenius/agent/agent
+        desc: ''
+        meta:
+          minimum_dify_version: 1.7.0
+          version: 0.0.2
+        output_schema: null
+        plugin_unique_identifier: langgenius/agent:0.0.23@baba5fd2631a535dcd85f070f8be1bdcfb02c46e1a0a830ad00d7bc846063de4
+        selected: false
+        title: Agent地图信息
+        tool_node_version: '2'
+        type: agent
+      height: 197
+      id: '17524833319640'
+      position:
+        x: 2462
+        y: 1339
+      positionAbsolute:
+        x: 2462
+        y: 1339
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        classes:
+        - id: '1'
+          name: 只是日常查询应急知识，做一些应急知识的回答
+        - id: '2'
+          name: 当需要你去拟定一个应急救援方案
+        desc: ''
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        query_variable_selector:
+        - sys
+        - query
+        selected: false
+        title: 问题分类器 2
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 187
+      id: '1752483688809'
+      position:
+        x: 2766
+        y: 430.5
+      positionAbsolute:
+        x: 2766
+        y: 430.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1752040353794.text#}}'
+        desc: ''
+        selected: false
+        title: 直接回复 3
+        type: answer
+        variables: []
+      height: 104
+      id: '1752500809757'
+      position:
+        x: 6678
+        y: 479.5
+      positionAbsolute:
+        x: 6678
+        y: 479.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        items:
+        - input_type: constant
+          operation: set
+          value: 5000
+          variable_selector:
+          - conversation
+          - radius
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - city_name
+          variable_selector:
+          - conversation
+          - city_name
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - disaster_range
+          variable_selector:
+          - conversation
+          - disaster_range
+          write_mode: over-write
+        - input_type: constant
+          operation: set
+          value: 未知
+          variable_selector:
+          - conversation
+          - disaster_grade
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - disaster_type
+          variable_selector:
+          - conversation
+          - disaster_type
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - current_injury
+          variable_selector:
+          - conversation
+          - current_injury
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - incident_site
+          variable_selector:
+          - conversation
+          - incident_site
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - avoidpolygons
+          variable_selector:
+          - conversation
+          - avoidpolygons
+          write_mode: over-write
+        selected: false
+        title: 提示词变量赋值
+        type: assigner
+        version: '2'
+      height: 283
+      id: '1752647191242'
+      position:
+        x: 1550
+        y: 1350
+      positionAbsolute:
+        x: 1550
+        y: 1350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        parameters:
+        - description: 提取出query中的具体的某个城市的名称
+          name: city_name
+          required: false
+          type: string
+        - description: 提取出目前遇到灾害的名称，比如是地震还是台风还是别的什么
+          name: disaster_type
+          required: false
+          type: string
+        - description: 根据用户所描述的内容，分析出灾害目前的等级如何
+          name: disaster_grade
+          required: false
+          type: string
+        - description: 提炼并且总结出目前的伤亡情况
+          name: current_injury
+          required: false
+          type: string
+        - description: 分析出目前灾害影响的范围，以km为单位
+          name: disaster_range
+          required: false
+          type: number
+        - description: 用于描述当前灾害地事发地的中心位置
+          name: incident_site
+          required: false
+          type: string
+        - description: 将避让区域中的不同地点使用逗号 , 分隔，并生成一个列表，例如：["西湖", "之江", "滨江"]。
+          name: avoidpolygons
+          required: false
+          type: array[string]
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 问题参数提取器
+        type: parameter-extractor
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1752746496115'
+      position:
+        x: 1246
+        y: 1027
+      positionAbsolute:
+        x: 1246
+        y: 1027
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        break_conditions: []
+        desc: ''
+        error_handle_mode: terminated
+        height: 926
+        logical_operator: and
+        loop_count: 3
+        loop_variables: []
+        selected: false
+        start_node_id: 1753161668061start
+        title: 循环
+        type: loop
+        width: 3548
+      height: 926
+      id: '1753161668061'
+      position:
+        x: 3070
+        y: 630
+      positionAbsolute:
+        x: 3070
+        y: 630
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 3548
+      zIndex: 1
+    - data:
+        desc: ''
+        isInLoop: true
+        selected: false
+        title: ''
+        type: loop-start
+      draggable: false
+      height: 48
+      id: 1753161668061start
+      parentId: '1753161668061'
+      position:
+        x: 60
+        y: 156.5
+      positionAbsolute:
+        x: 3130
+        y: 786.5
+      selectable: false
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-loop-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        memory:
+          query_prompt_template: '{{#17524833319640.text#}}{{#sys.query#}}{{#17524833289810.text#}}{{#1754382066397.text#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            num_predict: 16000
+          mode: chat
+          name: LightragModel:latest
+          provider: langgenius/ollama/ollama
+        prompt_config:
+          jinja2_variables: []
+        prompt_template:
+        - edition_type: basic
+          id: 200eaab0-32c6-4e4b-98a3-025e7d19020c
+          role: system
+          text: '下面是按你“最终输出”的结构，重新整理过且更“可执行”的提示词。它严格保留你对工具输出“原文不改、不可删减/重排”的要求，并把各段写作约束说清楚，直接贴入你的工作流即可使用。
+
+
+            <instruction>
+
+
+            你是一位经验丰富的应急救援方案制定专家，擅长结合多源信息生成有针对性、可操作的灾害应对方案。
+
+            撰写方案时须遵循以下硬性规则（违反任一条即判定为不合格）：
+
+
+            **A. 工具输出保留规则（最重要）**
+
+
+            1. 必须**逐字保留**我提供的各项工具输出内容（如路径规划结果、重点设施清单、气象文本等），允许做**轻度语句润色**以保证通顺，但**严禁**改写事实、删减、合并、重排、插入省略号、任何注释或省略标记。
+
+            2. **不得将变量内容夹在句中**导致信息缺失；一旦出现枚举或表格型结果，需**完整呈现**。
+
+            3. 若某字段未给到或标注“无”，请在对应位置明确写“无”，**不得推测/杜撰**。
+
+
+            **B. 输出格式与语言**
+
+
+            1. 使用 **Markdown**；
+
+            2. **必须严格**按照“输出”部分给出的**标题与编号**书写，**不得增删改标题**、**不得调整顺序**；
+
+            3. 采用自然语言完整表达，可用要点（bullet）细化；
+
+            4. 语言需专业、清晰、行动导向；不得输出与方案无关的解释性前言或尾注。
+
+
+            **C. 推理与约束**
+
+
+            1. “区域基础建设与医疗资源情况”仅做**常识性推理**，禁止编造具体机构名称/数据；
+
+            2. 对天气、预警、空气质量、未来3日趋势等，**仅以提供的气象综合描述字段**为依据（无则写“无”）；
+
+            3. 若“上轮方案是否遗漏关键信息”指出了遗漏，需在**相关小节就地补强**并点明“本轮已补充：…”。
+
+            4. 任何数值或专名**以工具输出为准**；你不得“更正”工具结果。
+
+
+            **D. 特别条款：第5.4节周边医院救援路线**
+
+
+            * 必须**原样保留**自动路径规划结果文本中关于八个方向（正北、东北、正东、东南、正南、西南、正西、西北）的全部细节；
+
+            * 在**原文之后**，再按要求列出每个方向：关键路径节点、预计行驶时间（分钟）、距离（公里）。若工具未提供时间或距离，**明确写“未知”**，不得自行估算。
+
+
+            ### 输入信息包括：
+
+
+            1. 当前灾害信息：
+
+
+               * 灾害类型：{{#conversation.disaster_type#}}
+
+               * 灾害等级：{{#conversation.disaster_grade#}}（如一般、较大、重大、特别重大）
+
+               * 灾害影响范围：{{#conversation.disaster_range#}}
+
+               * 当前伤亡情况：{{#conversation.current_injury#}}
+
+
+            2. 城市基础信息：
+
+
+               * 城市名称：{{#1752746496115.city_name#}}
+
+
+            3. 城市气象情况：
+
+
+               * 综合描述字段：{{#17524833289810.text#}}
+
+               * 包括：当前气温、风速、湿度、体感温度、天气现象、天气预警信息（如无请注明“无”）、未来3日天气趋势、空气质量（如适用）
+
+
+            4. 区域基础建设与医疗资源情况（请基于{{#1752746496115.city_name#}}的常识性推理）：
+
+
+               * 基础设施完善程度（交通、通信、能源）
+
+               * 医疗资源配置及响应时效
+
+               * 城市经济建设水平与资源调度能力
+
+               * 应急响应中的潜在瓶颈或风险点
+
+
+            5. 地理位置与重点设施：
+
+
+               * 灾害中心坐标：{{#1752746496115.city_name#}}
+
+               * 检索半径：5km
+
+               * 重点应急设施清单：{{#17524833319640.text#}}（如医院、避难所、消防站、物资仓库、学校、场馆等）
+
+
+
+            6. 上轮方案是否遗漏关键信息：{{#conversation.missed#}}
+
+
+
+            ---
+
+
+
+            ### 输出要求：
+
+
+
+            * 使用 **Markdown 格式** 输出；
+
+            * **严格**按照**下方“输出模板”**的**标题编号与顺序**撰写，不得更改结构；
+
+            * 各段落为自然语言完整表述，允许用要点细化；
+
+            * 凡涉及工具输出（如第3节天气综述、第5节设施清单、第5.4节路线结果），**必须先原样呈现**，再进行分析或补充（若要求）；
+
+            * 若{{#conversation.missed#}}指出有遗漏，需在对应小节**明确补强**。
+
+
+            </instruction>
+
+
+            <output>
+
+            # 灾害应急救援方案
+
+
+            ---
+
+
+            ## 一、灾情综合分析
+
+
+            ### 1.1 灾害基本特征
+
+
+            * 综合分析灾害的类型、等级、波及范围、人员伤亡情况；
+
+            * 指出灾害的紧急性与可能的发展趋势。
+
+
+            ### 1.2 区域能力评估
+
+
+            * 基于{{#1752746496115.city_name#}}的城市等级与发展水平；
+
+            * 评估其基础设施承载力、医疗响应速度、政府调度能力；
+
+            * 分析潜在风险点与救援薄弱环节。
+
+
+            ### 1.3 当前天气状况与影响
+
+
+            * 概述当前天气特征与气象预警（来自 {{#17524833289810.text#}}）；
+
+            * 分析风速、降水、温度等因素对救援进度与安全的影响；
+
+            * 结合未来趋势预测潜在不利条件。
+
+
+            ---
+
+
+            ## 二、应急响应目标
+
+
+            * 保障人民生命安全；
+
+            * 避免灾害进一步扩散；
+
+            * 维护基础设施稳定运行；
+
+            * 快速恢复城市基本秩序。
+
+
+            ---
+
+
+            ## 三、核心任务部署
+
+
+            ### 3.1 现场指挥体系
+
+
+            * 建立统一的前线指挥系统；
+
+            * 明确各部门职责分工（应急管理、卫健委、交通局等）；
+
+            * 制定多部门联动协调机制。
+
+
+            ### 3.2 关键行动方案
+
+
+            * 制定医疗救援路径和急救中心部署；
+
+            * 避难所分布及疏散路线设置；
+
+            * 物资仓库选址与分发中转机制。
+
+
+            ---
+
+
+            ## 四、专项应对策略
+
+
+            ### 4.1 次生灾害防控
+
+
+            * 结合 {{#17524833289810.text#}} 提取的地形信息，识别周边存在的河流、山体、地下管网等风险源；
+
+            * 预判山体滑坡、内涝、传染病传播等风险；
+
+            * 制定具体预警与干预方案。
+
+
+            ### 4.2 特殊地形应对
+
+
+            * 针对建筑密集、地势复杂区域，制定差异化救援方案；
+
+            * 使用徒步巡查、无人机侦查等手段提升响应效率。
+
+
+            ---
+
+
+            ## 五、资源调度计划
+
+
+            ### 5.1 医疗资源配置
+
+
+            * 从 {{#17524833319640.text#}} 中提取是否有医院、诊所、卫生站；
+
+            * 若医疗能力有限，应优先调集临近区域医疗力量。
+
+
+            ### 5.2 避难与安置空间
+
+
+            * 搜索5km范围内的学校、酒店、体育馆、空置公共场所；
+
+            * 评估可容纳人数，作为临时避难场所。
+
+
+            ### 5.3 物资与人力调度
+
+
+            * 判断本地是否有能力自足，是否需外援；
+
+            * 列出重点物资调配路径；
+
+            * 安排多梯队人力轮替支援机制。
+
+
+            ### 5.4 周边医院救援路线
+
+
+            以下为系统计算的八个方向医院到目标地点的救援路线（来自自动路径规划结果），请在方案中保留全部细节，不做省略或改写{{#1754382066397.text#}}：
+
+            请针对目标地点的八个方向（正北、东北、正东、东南、正南、西南、正西、西北）分别选取一所周边医院，输出以下信息：
+
+            推荐救援路线的关键路径节点（如高速/主干道名称）；
+
+            预计行驶时间（单位：分钟）；
+
+            医院到目标地点的直线或行驶距离（单位：公里）。
+
+            -----------------------
+
+
+            ## 六、信息管理机制
+
+
+            * 建立统一的信息通报机制；
+
+            * 设置多渠道发布平台（广播、网络、政务APP）；
+
+            * 实时追踪舆情、澄清虚假信息；
+
+            * 启动心理疏导热线及公众答疑窗口。
+
+
+            </output>'
+        selected: false
+        title: 最后的LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1753162243577'
+      parentId: '1753161668061'
+      position:
+        x: 204
+        y: 136
+      positionAbsolute:
+        x: 3274
+        y: 766
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        classes:
+        - id: '1'
+          name: 在最后的分析报告的结果中详尽的讲述出{{#17524833289810.text#}}里面提到的内容
+        - id: '2'
+          name: 略微的说了{{#17524833289810.text#}}的内容，或者在最终的分析报告结果中对于天气影响关注不大
+        desc: ''
+        instructions: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        query_variable_selector:
+        - '1753162243577'
+        - text
+        selected: false
+        title: 是否详细考虑天气因素
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 241
+      id: '1753162369478'
+      parentId: '1753161668061'
+      position:
+        x: 812
+        y: 60
+      positionAbsolute:
+        x: 3882
+        y: 690
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        items:
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - geo_agree
+          write_mode: over-write
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - weather_agree
+          write_mode: over-write
+        - input_type: variable
+          operation: clear
+          value: ''
+          variable_selector:
+          - conversation
+          - missed
+          write_mode: over-write
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - path_agree
+          write_mode: over-write
+        loop_id: '1753161668061'
+        selected: false
+        title: 变量赋值 3
+        type: assigner
+        version: '2'
+      height: 171
+      id: '1753162633470'
+      parentId: '1753161668061'
+      position:
+        x: 508
+        y: 95
+      positionAbsolute:
+        x: 3578
+        y: 725
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        classes:
+        - id: '1'
+          name: 在最后的分析报告的结果中详尽的讲述出{{#17524833319640.text#}}/里面提到的内容
+        - id: '2'
+          name: 略微的说了{{#17524833319640.text#}}的内容，或者在最终的分析报告结果中对于地理信息的影响关注不大/
+        desc: ''
+        instructions: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        query_variable_selector:
+        - '1753162243577'
+        - text
+        selected: false
+        title: 是否详细考虑地理信息因素
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 241
+      id: '1753162737967'
+      parentId: '1753161668061'
+      position:
+        x: 812
+        y: 341
+      positionAbsolute:
+        x: 3882
+        y: 971
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: b56b914d-9f5c-4bac-8770-6f6bb5e3c356
+            value: '1'
+            varType: number
+            variable_selector:
+            - conversation
+            - geo_agree
+          - comparison_operator: '='
+            id: 81ea9a1a-0692-4828-af92-57529a76f8a6
+            value: '1'
+            varType: number
+            variable_selector:
+            - conversation
+            - weather_agree
+          - comparison_operator: '='
+            id: 980f2b64-7ebf-4f40-bf2e-3c913fef602b
+            value: '1'
+            varType: number
+            variable_selector:
+            - conversation
+            - path_agree
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        selected: false
+        title: 条件分支 2
+        type: if-else
+      height: 177
+      id: '1753163155535'
+      parentId: '1753161668061'
+      position:
+        x: 1420
+        y: 373
+      positionAbsolute:
+        x: 4490
+        y: 1003
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        answer: '{{#1753162243577.text#}}'
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        selected: false
+        title: 直接回复 3
+        type: answer
+        variables: []
+      height: 104
+      id: '1753711423105'
+      parentId: '1753161668061'
+      position:
+        x: 1724
+        y: 409.5
+      positionAbsolute:
+        x: 4794
+        y: 1039.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        selected: false
+        title: 退出循环
+        type: loop-end
+      height: 53
+      id: '1753711462182'
+      parentId: '1753161668061'
+      position:
+        x: 2028
+        y: 435
+      positionAbsolute:
+        x: 5098
+        y: 1065
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-simple
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        items:
+        - input_type: constant
+          operation: set
+          value: 1
+          variable_selector:
+          - conversation
+          - weather_agree
+          write_mode: over-write
+        loop_id: '1753161668061'
+        selected: false
+        title: 天气变量赋值
+        type: assigner
+        version: '2'
+      height: 87
+      id: '1753799485783'
+      parentId: '1753161668061'
+      position:
+        x: 1116
+        y: 137
+      positionAbsolute:
+        x: 4186
+        y: 767
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        items:
+        - input_type: constant
+          operation: set
+          value: 1
+          variable_selector:
+          - conversation
+          - geo_agree
+          write_mode: over-write
+        loop_id: '1753161668061'
+        selected: false
+        title: 路径变量赋值
+        type: assigner
+        version: '2'
+      height: 87
+      id: '1753799492089'
+      parentId: '1753161668061'
+      position:
+        x: 1116
+        y: 418
+      positionAbsolute:
+        x: 4186
+        y: 1048
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: 7d35ef2f-3466-46ee-9c54-e4850713874f
+            value: '0'
+            varType: number
+            variable_selector:
+            - conversation
+            - weather_agree
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        selected: false
+        title: 条件分支 2
+        type: if-else
+      height: 125
+      id: '1753799669136'
+      parentId: '1753161668061'
+      position:
+        x: 1724
+        y: 553.5
+      positionAbsolute:
+        x: 4794
+        y: 1183.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        items:
+        - input_type: variable
+          operation: append
+          value:
+          - conversation
+          - miss_weather
+          variable_selector:
+          - conversation
+          - missed
+          write_mode: over-write
+        loop_id: '1753161668061'
+        selected: false
+        title: 变量赋值 5
+        type: assigner
+        version: '2'
+      height: 87
+      id: '1753799735144'
+      parentId: '1753161668061'
+      position:
+        x: 2028
+        y: 572.5
+      positionAbsolute:
+        x: 5098
+        y: 1202.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: d552faea-d07c-45c5-bbc2-cafa0c372251
+            value: '0'
+            varType: number
+            variable_selector:
+            - conversation
+            - geo_agree
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        selected: false
+        title: 条件分支 3
+        type: if-else
+      height: 125
+      id: '1753799988067'
+      parentId: '1753161668061'
+      position:
+        x: 2332
+        y: 553.5
+      positionAbsolute:
+        x: 5402
+        y: 1183.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        items:
+        - input_type: variable
+          operation: append
+          value:
+          - conversation
+          - miss_path
+          variable_selector:
+          - conversation
+          - missed
+          write_mode: over-write
+        loop_id: '1753161668061'
+        selected: false
+        title: 变量赋值 6
+        type: assigner
+        version: '2'
+      height: 87
+      id: '1753800038007'
+      parentId: '1753161668061'
+      position:
+        x: 2636
+        y: 572.5
+      positionAbsolute:
+        x: 5706
+        y: 1202.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        error_strategy: fail-branch
+        is_team_authorization: true
+        output_schema: null
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          label:
+            en_US: destination
+            ja_JP: destination
+            pt_BR: destination
+            zh_Hans: destination
+          llm_description: ''
+          max: null
+          min: null
+          name: destination
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          input_schema:
+            default: []
+            items: {}
+            title: Avoidpolygons
+            type: array
+          label:
+            en_US: avoidpolygons
+            ja_JP: avoidpolygons
+            pt_BR: avoidpolygons
+            zh_Hans: avoidpolygons
+          llm_description: ''
+          max: null
+          min: null
+          name: avoidpolygons
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: array
+        params:
+          avoidpolygons: ''
+          destination: ''
+        provider_id: get_route_summary
+        provider_name: 路线规划
+        provider_type: mcp
+        selected: false
+        title: get_route_summary
+        tool_configurations: {}
+        tool_description: "        获取以指定地址为中心的多方向路径规划摘要（支持避让区域）。\n\n        参数：\n\
+          \            destination (str): 目标中心地址，作为路径终点。例如：\"杭州电子科技大学下沙校区\"。\n   \
+          \         avoidpolygons (list): （可选）避让区域，格式为多边形坐标列表。每个区域为一组经纬度点组成的闭合多边形：\n\
+          \                [\n                    [[lng1, lat1], [lng2, lat2], ...,\
+          \ [lngN, latN]],   # 第一个区域\n                    [[lng1, lat1], [lng2, lat2],\
+          \ ..., [lngN, latN]],   # 第二个区域\n                    ...\n             \
+          \   ]\n                - 最多支持 32 个区域，每个区域最多 16 个点。\n                - 地名输入会自动转换为对应经纬度坐标点（例如\
+          \ [\"西湖\", \"之江\", \"滨江\"]）。\n\n        返回：\n            dict:\n       \
+          \         - 成功时，返回：\n                    {\n                        \"results\"\
+          : {\n                            \"正北\": \"从 XXX医院 到 destination 的路线总长约\
+          \ XXXX 米，用时约 XXXX 秒。\n步骤列表...\",\n                            ...\n    \
+          \                    }\n                    }\n                - 失败时，返回：\n\
+          \                    {\"error\": \"错误信息\"}\n\n        功能说明：\n          \
+          \  - 自动获取以目标地址为中心、半径50公里内八个方位（正北、东北、正东、东南、正南、西南、正西、西北）最具权威的医院。\n       \
+          \     - 使用高德路径规划 API，计算每家医院到中心地址的最佳行车路线。\n            - 支持设置避让区域，绕开用户指定的敏感区域或灾害区域。\n\
+          \            - 输出每个方向的路线总长度、预计用时，并提取关键导航步骤（忽略单段低于1000米的指令）。\n        "
+        tool_label: get_route_summary
+        tool_name: get_route_summary
+        tool_node_version: '2'
+        tool_parameters:
+          avoidpolygons:
+            type: variable
+            value:
+            - '1752746496115'
+            - avoidpolygons
+          destination:
+            type: mixed
+            value: '{{#1752746496115.incident_site#}}'
+        type: tool
+      height: 121
+      id: '1754381915051'
+      position:
+        x: 2158
+        y: 1027
+      positionAbsolute:
+        x: 2158
+        y: 1027
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "def main(json_data: list) -> dict:\n    \"\"\"\n    从输入的JSON数据中提取路线信息并格式化为字符串\n\
+          \    :param json_data: 输入的JSON数据列表\n    :return: 包含格式化结果的字典（result字段为字符串）\n\
+          \    \"\"\"\n    try:\n        # 处理空输入\n        if not json_data or not\
+          \ json_data[0].get(\"results\"):\n            return {\"result\": \"未找到路线信息\"\
+          }\n        \n        # 获取results字典\n        results_data = json_data[0].get(\"\
+          results\", {})\n        \n        # 格式化为字符串\n        formatted_str = \"\"\
+          \n        for direction, route in results_data.items():\n            formatted_str\
+          \ += f\"方向: {direction}\\n路线: {route}\\n\\n\"\n        \n        # 移除最后一个多余的换行符\n\
+          \        return {\"result\": formatted_str.strip()}\n    \n    except Exception\
+          \ as e:\n        # 返回错误信息\n        return {\"result\": f\"处理数据时出错: {str(e)}\"\
+          }"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 内容提取
+        type: code
+        variables:
+        - value_selector:
+          - '1754381915051'
+          - json
+          value_type: array[object]
+          variable: json_data
+      height: 53
+      id: '1754381989734'
+      position:
+        x: 2462
+        y: 1102
+      positionAbsolute:
+        x: 2462
+        y: 1102
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 31fe8b20-adf8-4038-a0f5-f275d07f9ad0
+          role: system
+          text: 汇总信息{{#1754381989734.result#}}，生成一份结构性报告（不要删减内容)
+        selected: false
+        title: 路径规划LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1754382066397'
+      position:
+        x: 2766
+        y: 1027
+      positionAbsolute:
+        x: 2766
+        y: 1027
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1754381915051.error_message#}}'
+        desc: ''
+        selected: false
+        title: 直接回复 4
+        type: answer
+        variables: []
+      height: 104
+      id: '1754382082698'
+      position:
+        x: 2462
+        y: 1195
+      positionAbsolute:
+        x: 2462
+        y: 1195
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        classes:
+        - id: '1'
+          name: 在最后的分析报告的结果中详尽的讲述出{{#1754382066397.text#}}里面提到的内容
+        - id: '2'
+          name: 略微的说了{{#1754382066397.text#}}的内容，或者在最终的分析报告结果中对于救援路线关注不大
+        desc: ''
+        instructions: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: Qwen/Qwen2.5-14B-Instruct
+          provider: langgenius/siliconflow/siliconflow
+        query_variable_selector:
+        - '1753162243577'
+        - text
+        selected: false
+        title: 问题分类器 5
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 241
+      id: '1754383573523'
+      parentId: '1753161668061'
+      position:
+        x: 812
+        y: 622
+      positionAbsolute:
+        x: 3882
+        y: 1252
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        items:
+        - input_type: constant
+          operation: set
+          value: 1
+          variable_selector:
+          - conversation
+          - path_agree
+          write_mode: over-write
+        loop_id: '1753161668061'
+        selected: false
+        title: 路径变量赋值
+        type: assigner
+        version: '2'
+      height: 87
+      id: '1754383960236'
+      parentId: '1753161668061'
+      position:
+        x: 1116
+        y: 699
+      positionAbsolute:
+        x: 4186
+        y: 1329
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: 204d59b4-c5dc-44c1-8bd8-d68a43cad71f
+            value: '0'
+            varType: number
+            variable_selector:
+            - conversation
+            - path_agree
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        loop_id: '1753161668061'
+        selected: false
+        title: 条件分支 4
+        type: if-else
+      height: 125
+      id: '1754384011771'
+      parentId: '1753161668061'
+      position:
+        x: 2940
+        y: 553.5
+      positionAbsolute:
+        x: 6010
+        y: 1183.5
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: true
+        items:
+        - input_type: variable
+          operation: append
+          value:
+          - conversation
+          - miss_path
+          variable_selector:
+          - conversation
+          - missed
+          write_mode: over-write
+        loop_id: '1753161668061'
+        selected: false
+        title: 变量赋值 8
+        type: assigner
+        version: '2'
+      height: 87
+      id: '1754384030853'
+      parentId: '1753161668061'
+      position:
+        x: 3244
+        y: 572.5
+      positionAbsolute:
+        x: 6314
+        y: 1202.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '17524833319640'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            max_tokens: 8192
+            temperature: 0.7
+          mode: chat
+          name: deepseek-ai/DeepSeek-V3
+          provider: langgenius/siliconflow/siliconflow
+        prompt_template:
+        - id: 73962f8c-b7be-4a43-b021-b83780238684
+          role: system
+          text: "你是一名信息呈现器，要出输出结果必须是表格形式\n输入是{{#17524833319640.text#}}\n\n任务：\n1.\
+            \ 按“类别”分组输出，顺序固定为：\n   - 1.地理环境状态（山体、河流、湖泊）\n   - 2.医疗与救援资源可用性（医院、消防站、政府救援机构）\n\
+            \   - 3.显性与潜在风险点（易受灾点、高风险设施、人群暴露点）\n   - 4.避难场所与安置能力（官方避难所、可用酒店/宾馆/学校）\n\
+            \   - 5.教育设施受灾情况\n   - 6.大型公共设施状态\n2. 每类数据按“距离”字段升序排列。\n3. 每类单独输出一个 Markdown\
+            \ 表格，表头固定为：\n   | 名称 | 地址 |  距离(米) | 附加信息 |\n4. “附加信息”栏若存在其他字段（如 hydrology\
+            \ 水文数据、工具“水文”调用结果，若无法获取则跳过，对于学校通过tavily工具检索学校官网获取目前学校的师生人数），如无法通过工具获取信息则在改行的附加条件中写入位置信息，必须原样输出，不得删除或改写。\n\
+            5. 不允许合并、删减或省略任何记录，即使数据很多，也要分页或分批输出全部内容。\n6. 输出仅为markdown表格形式，不写主观描述、不做总结、不添加解释性语句。\n\
+            7. 原样输出输入数据中所有记录。"
+        selected: false
+        title: LLM 5
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1754900346406'
+      position:
+        x: 2766
+        y: 1336
+      positionAbsolute:
+        x: 2766
+        y: 1336
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: Qwenvl:latest
+          provider: langgenius/ollama/ollama
+        prompt_template:
+        - id: 644714df-a110-4ee8-baf9-58d2fa1ec34f
+          role: system
+          text: 分析受灾区域的受灾情况
+        selected: false
+        title: 灾情评估
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - sys
+            - files
+          enabled: true
+      height: 89
+      id: '1754922581960'
+      position:
+        x: 334
+        y: 1350
+      positionAbsolute:
+        x: 334
+        y: 1350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        parameters:
+        - description: 灾情的严重程度
+          name: disaster_grade
+          required: false
+          type: string
+        query:
+        - '1754922581960'
+        - text
+        reasoning_mode: prompt
+        selected: false
+        title: 灾情信息
+        type: parameter-extractor
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1754922771359'
+      position:
+        x: 638
+        y: 1350
+      positionAbsolute:
+        x: 638
+        y: 1350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: not empty
+            id: 5039f9e9-8c2d-460c-95f2-405e459a272c
+            value: ''
+            varType: string
+            variable_selector:
+            - conversation
+            - disaster_grade
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 是否能从图片中获取灾害的严重程度信息
+        type: if-else
+      height: 125
+      id: '1754922972993'
+      position:
+        x: 1246
+        y: 1332
+      positionAbsolute:
+        x: 1246
+        y: 1332
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1754922581960'
+          - text
+          variable_selector:
+          - conversation
+          - disaster_grade
+          write_mode: over-write
+        selected: false
+        title: 灾害严重程度
+        type: assigner
+        version: '2'
+      height: 87
+      id: '1754923023946'
+      position:
+        x: 942
+        y: 1350
+      positionAbsolute:
+        x: 942
+        y: 1350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        items:
+        - input_type: constant
+          operation: set
+          value: 5000
+          variable_selector:
+          - conversation
+          - radius
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - city_name
+          variable_selector:
+          - conversation
+          - city_name
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - disaster_range
+          variable_selector:
+          - conversation
+          - disaster_range
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - disaster_type
+          variable_selector:
+          - conversation
+          - disaster_type
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - current_injury
+          variable_selector:
+          - conversation
+          - current_injury
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - incident_site
+          variable_selector:
+          - conversation
+          - incident_site
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - avoidpolygons
+          variable_selector:
+          - conversation
+          - avoidpolygons
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1752746496115'
+          - disaster_grade
+          variable_selector:
+          - conversation
+          - disaster_grade
+          write_mode: over-write
+        selected: false
+        title: 提示词变量赋值1
+        type: assigner
+        version: '2'
+      height: 283
+      id: '17549231552850'
+      position:
+        x: 1550
+        y: 1027
+      positionAbsolute:
+        x: 1550
+        y: 1027
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        advanced_settings:
+          group_enabled: false
+          groups:
+          - groupId: 108c0618-b099-4dc9-aa6c-a62130822884
+            group_name: Group1
+            output_type: any
+            variables: []
+        desc: ''
+        output_type: array[file]
+        selected: false
+        title: 变量聚合器
+        type: variable-aggregator
+        variables:
+        - - '1751250025987'
+          - disaster_image
+      height: 108
+      id: '1754923341220'
+      position:
+        x: 1854
+        y: 1027
+      positionAbsolute:
+        x: 1854
+        y: 1027
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 75.14806251810296
+      y: -26.998382933738185
+      zoom: 0.37892914162759994
