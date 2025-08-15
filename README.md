@@ -93,3 +93,11 @@ graph TD
 ├── 应急灾害方案生成智能体.yml        # Dify 可导入 DSL 工作流文件
 └── README.md                       # 项目说明文档
 ```
+
+## 致谢
+
+本项目得益于以下优秀开源项目的支持，特此致谢：
+
+- [LightRAG](https://github.com/HKUDS/LightRAG)：轻量级 RAG 检索生成框架  
+- [Dify](https://github.com/langgenius/dify)：可视化工作流与智能体平台  
+- [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)：高效的 LLaMA 系列模型微调框架  
